@@ -34,7 +34,7 @@ export default function AuthModal() {
     });
     setRole('student');
     setIsAuthModalOpen(false);
-    showToast(`Entered MindSpace as Anonymous Visitor (${sessionHash})`, 'success');
+    showToast(`Entered Haven KNUST as Anonymous Visitor (${sessionHash})`, 'success');
   };
 
   const handleStudentSSO = (e) => {
@@ -85,7 +85,7 @@ export default function AuthModal() {
             </div>
             <div>
               <h3 className="modal-title" style={{ margin: 0 }}>Campus Access & Authentication Portal</h3>
-              <span style={{ fontSize: '0.775rem', color: 'var(--text-muted)' }}>MindSpace University Single Sign-On (SSO)</span>
+              <span style={{ fontSize: '0.775rem', color: 'var(--text-muted)' }}>KNUST Single Sign-On (SSO) Portal</span>
             </div>
           </div>
           <button className="close-btn" onClick={() => setIsAuthModalOpen(false)}>
@@ -140,7 +140,7 @@ export default function AuthModal() {
               </div>
 
               <button className="btn-primary" onClick={handleGuestLogin}>
-                <span>Enter MindSpace as Anonymous Visitor</span>
+                <span>Enter Haven KNUST as Anonymous Visitor</span>
                 <ArrowRight size={16} />
               </button>
             </div>
@@ -221,7 +221,7 @@ export default function AuthModal() {
                 />
               </div>
 
-              <button type="submit" className="btn-primary" style={{ background: '#1e4d40' }}>
+              <button type="submit" className="btn-primary" style={{ background: 'var(--primary-teal)' }}>
                 <ShieldCheck size={16} />
                 <span>Enter Counselor Command Center</span>
               </button>

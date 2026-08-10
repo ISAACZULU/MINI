@@ -27,7 +27,7 @@ export default function ComplianceModal() {
               <span>FERPA & HIPAA Technical Safeguards Verified</span>
             </div>
             <p style={{ fontSize: '0.9rem', color: '#166534', margin: 0, lineHeight: 1.5 }}>
-              MindSpace strictly separates student academic identifiers from wellness data. All communications utilize ephemeral session tokens with zero permanent IP logging.
+              Haven KNUST strictly separates student academic identifiers from wellness data. All communications utilize ephemeral session tokens with zero permanent IP logging.
             </p>
           </div>
 

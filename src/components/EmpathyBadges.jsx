@@ -1,11 +1,12 @@
 import React from 'react';
+import { Shield, Heart, Sparkles, Coffee } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export const EMPATHY_BADGES = [
-  { id: 'resilient', emoji: '💛', label: 'Resilient' },
-  { id: 'hug', emoji: '🫂', label: 'Warm Hug' },
-  { id: 'star', emoji: '🌟', label: "You've Got This" },
-  { id: 'coffee', emoji: '☕', label: 'Take a Rest' }
+  { id: 'resilient', Icon: Shield, label: 'Resilient', animClass: 'animate-icon-lock' },
+  { id: 'hug', Icon: Heart, label: 'Warm Hug', animClass: 'animate-icon-heart' },
+  { id: 'star', Icon: Sparkles, label: "You've Got This", animClass: 'animate-icon-star' },
+  { id: 'coffee', Icon: Coffee, label: 'Take a Rest', animClass: 'animate-icon-user' }
 ];
 
 export default function EmpathyBadges({ postId, reactions = {} }) {
@@ -15,6 +16,7 @@ export default function EmpathyBadges({ postId, reactions = {} }) {
     <div className="empathy-badges-row">
       {EMPATHY_BADGES.map(b => {
         const count = reactions[b.id] || 0;
+        const BadgeIcon = b.Icon;
         return (
           <button
             key={b.id}
@@ -26,7 +28,9 @@ export default function EmpathyBadges({ postId, reactions = {} }) {
             }}
             title={`Send "${b.label}" encouragement`}
           >
-            <span>{b.emoji}</span>
+            <span className={b.animClass} style={{ display: 'inline-flex', alignItems: 'center' }}>
+              <BadgeIcon size={14} />
+            </span>
             <span className="empathy-badge-label">{b.label}</span>
             {count > 0 && <span className="empathy-badge-count">{count}</span>}
           </button>

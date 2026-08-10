@@ -12,7 +12,11 @@ import {
   Volume1,
   Key,
   ExternalLink,
-  Square
+  Square,
+  BrainCircuit,
+  FileText,
+  AlertTriangle,
+  Heart
 } from 'lucide-react';
 import { generateMentalHealthAIResponse } from '../services/aiService';
 import { useApp } from '../context/AppContext';
@@ -27,7 +31,7 @@ export default function FloatingAIAssistant() {
     {
       id: 'm-1',
       sender: 'ai',
-      text: 'Hi! I am MindSpace AI, powered as your direct portal to Google Gemini. Ask me anything—from coding, math, science, and general advice to mental health support and daily chat!'
+      text: 'Hi! I am Haven KNUST AI, powered as your direct portal to Google Gemini. Ask me anything—from coding, math, science, and general advice to mental health support and daily chat!'
     }
   ]);
 
@@ -410,17 +414,21 @@ export default function FloatingAIAssistant() {
 
           {/* Quick Suggestion Pills */}
           <div className="ai-suggestion-pills">
-            <button type="button" className="ai-chip" onClick={() => handleChipClick('Explain quantum physics in simple terms')}>
-              🔬 Quantum Physics
+            <button type="button" className="ai-chip" onClick={() => handleChipClick('Explain quantum physics in simple terms')} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <span className="animate-icon-star"><BrainCircuit size={14} /></span>
+              <span>Quantum Physics</span>
             </button>
-            <button type="button" className="ai-chip" onClick={() => handleChipClick('Write a Python function to sort an array')}>
-              💻 Python Code
+            <button type="button" className="ai-chip" onClick={() => handleChipClick('Write a Python function to sort an array')} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <span className="animate-icon-settings"><FileText size={14} /></span>
+              <span>Python Code</span>
             </button>
-            <button type="button" className="ai-chip" onClick={() => handleChipClick('How can I overcome severe exam stress?')}>
-              🌟 Exam Stress
+            <button type="button" className="ai-chip" onClick={() => handleChipClick('How can I overcome severe exam stress?')} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <span className="animate-icon-alert"><AlertTriangle size={14} /></span>
+              <span>Exam Stress</span>
             </button>
-            <button type="button" className="ai-chip" onClick={() => handleChipClick('Show me a breathing exercise')}>
-              🫁 Breathing Tool
+            <button type="button" className="ai-chip" onClick={() => handleChipClick('Show me a breathing exercise')} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <span className="animate-icon-heart"><Heart size={14} /></span>
+              <span>Breathing Tool</span>
             </button>
           </div>
 
@@ -469,8 +477,8 @@ export default function FloatingAIAssistant() {
 
           {/* Live Hearing Transcript Banner when mic is listening */}
           {isListening && (
-            <div className="live-hearing-banner">
-              <span className="live-mic-pulse">🎤</span>
+            <div className="live-hearing-banner" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span className="live-mic-pulse animate-icon-heart" style={{ display: 'flex', alignItems: 'center' }}><Mic size={14} /></span>
               <span>{interimText || 'Listening... Speak into your microphone now'}</span>
             </div>
           )}

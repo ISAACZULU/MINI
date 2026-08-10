@@ -103,7 +103,7 @@ export default function TelehealthRoomModal() {
                 </div>
               ) : (
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: '#1e4d40', border: '3px solid #10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto', fontSize: '1.8rem', fontWeight: 800 }}>
+                  <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'var(--primary-teal)', border: '3px solid var(--safety-green)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px auto', fontSize: '1.8rem', fontWeight: 800 }}>
                     SJ
                   </div>
                   <h4 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0 }}>{activeTelehealthRoom.counselorName}</h4>

@@ -53,8 +53,9 @@ export default function ModerationHub() {
                   <h4 className="triage-item-title">{post.title}</h4>
                   <p className="triage-item-body">{post.content}</p>
 
-                  <div className="triage-triggers-tag">
-                    🛡️ AI Safety Detection Flags: {post.riskAnalysis?.triggers ? post.riskAnalysis.triggers.join(', ') : 'High emotional distress indicators'}
+                  <div className="triage-triggers-tag" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span className="animate-icon-lock"><ShieldAlert size={14} /></span>
+                    <span>AI Safety Detection Flags: {post.riskAnalysis?.triggers ? post.riskAnalysis.triggers.join(', ') : 'High emotional distress indicators'}</span>
                   </div>
 
                   <div className="triage-card-bottom">

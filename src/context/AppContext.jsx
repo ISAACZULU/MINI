@@ -176,7 +176,16 @@ export function AppProvider({ children }) {
   };
 
   // Navigation State
-  const [activeTab, setActiveTab] = useState('peer_threads');
+  const [activeTab, setRawActiveTab] = useState('articles');
+  const setActiveTab = (tab) => {
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        setRawActiveTab(tab);
+      });
+    } else {
+      setRawActiveTab(tab);
+    }
+  };
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   // Persisted Posts
@@ -241,7 +250,7 @@ export function AppProvider({ children }) {
         mode: 'Telehealth Video',
         status: 'Confirmed',
         topic: 'Exam Anxiety & Panic Attacks',
-        meetingUrl: 'https://mindspace.campus.edu/join/telehealth-4821'
+        meetingUrl: 'https://haven.knust.edu.gh/join/telehealth-4821'
       }
     ];
   });
@@ -281,7 +290,7 @@ export function AppProvider({ children }) {
     if (userRole === 'counselor') {
       setActiveTab('counselor_triage');
     } else {
-      setActiveTab('peer_threads');
+      setActiveTab('articles');
     }
   };
 
@@ -443,7 +452,7 @@ export function AppProvider({ children }) {
     setMoodLogs([newLog, ...moodLogs]);
     setStreakCount(prev => prev + 1);
     setIsMoodModalOpen(false);
-    showToast('Daily mood check-in saved! Streak increased 🎉', 'success');
+    showToast('Daily mood check-in saved! Streak increased', 'success');
   };
 
   const handleBookAppointment = (counselorName, date, timeSlot, topic, mode) => {
@@ -456,7 +465,7 @@ export function AppProvider({ children }) {
       mode,
       status: 'Confirmed',
       topic,
-      meetingUrl: `https://mindspace.campus.edu/join/telehealth-${Math.floor(1000 + Math.random() * 9000)}`
+      meetingUrl: `https://haven.knust.edu.gh/join/telehealth-${Math.floor(1000 + Math.random() * 9000)}`
     };
 
     setAppointments(prev => [newAppt, ...prev]);
@@ -502,7 +511,7 @@ export function AppProvider({ children }) {
         mode: 'Telehealth Video',
         status: 'Confirmed',
         topic: 'Exam Anxiety & Panic Attacks',
-        meetingUrl: 'https://mindspace.campus.edu/join/telehealth-4821'
+        meetingUrl: 'https://haven.knust.edu.gh/join/telehealth-4821'
       }
     ]);
     showToast('Demo data reset to clean initial state', 'info');

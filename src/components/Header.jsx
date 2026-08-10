@@ -1,23 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Heart, 
   User, 
   RefreshCw, 
   Moon, 
   Sun, 
-  ShieldCheck, 
   CheckCircle,
-  Wind,
   RotateCcw,
   Shield,
-  LogOut
+  LogOut,
+  Calendar,
+  AlertTriangle
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export default function Header() {
   const { 
     role, 
-    setRole, 
     sessionHash, 
     rotateSessionHash, 
     theme, 
@@ -25,120 +24,108 @@ export default function Header() {
     setActiveTab, 
     setSelectedCategory,
     setIsFerpaModalOpen,
-    setIsBreathingModalOpen,
     setIsSafetyPlanModalOpen,
-    userAuth,
+    setIsAppointmentModalOpen,
+    setIsCrisisModalOpen,
     logout,
     resetDemoData
   } = useApp();
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <header className="app-header">
       <div className="header-inner">
         <div 
           className="brand-group" 
-          onClick={() => { setActiveTab('peer_threads'); setSelectedCategory('All'); }}
+          onClick={() => { setActiveTab('articles'); setSelectedCategory('All'); }}
+          style={{ cursor: 'pointer' }}
         >
           <div className="brand-logo-icon">
-            <Heart size={22} fill="#ffffff" color="#ffffff" />
+            <span className="animate-icon-heart">
+              <Heart size={22} fill="#ffffff" color="#ffffff" />
+            </span>
           </div>
           <div className="brand-text-container">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span className="brand-title">MindSpace</span>
+              <span className="brand-title">Haven KNUST</span>
             </div>
-            <span className="brand-subtitle">Campus Mental Health & AI Safety Platform</span>
+            <span className="brand-subtitle">Department of Computer Science Support & Safety Portal</span>
           </div>
         </div>
 
         <div className="header-actions">
-          {/* Active Identity Badge */}
-          <div className="user-badge-pill" title={`Logged in as ${userAuth?.displayName}`}>
-            <User size={13} />
-            <span>{userAuth?.displayName || sessionHash}</span>
-          </div>
-
-          {/* Sign Out Button */}
-          <button 
-            className="breathing-header-btn" 
-            style={{ color: '#e11d48', backgroundColor: 'rgba(225, 29, 72, 0.1)', fontWeight: 600 }}
-            onClick={logout}
-            title="Sign out and return to Sign-In page"
-          >
-            <LogOut size={14} />
-            <span>Sign Out</span>
-          </button>
-
-          {/* Personal Safety Net Plan Button */}
-          <button 
-            className="breathing-header-btn" 
-            style={{ color: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)' }}
-            onClick={() => setIsSafetyPlanModalOpen(true)}
-            title="Personal Emergency Safety Net Plan"
-          >
-            <Shield size={14} />
-            <span>Safety Plan</span>
-          </button>
-
-          {/* Guided 4-7-8 Breathwork Button */}
-          <button 
-            className="breathing-header-btn" 
-            onClick={() => setIsBreathingModalOpen(true)}
-            title="Interactive 4-7-8 Breathing Relief Exercise"
-          >
-            <Wind size={14} />
-            <span>Breathing Tool</span>
-          </button>
-
-          {/* Student vs Counselor Toggle Pill */}
-          <div className="mode-toggle-pill">
+          <div className={`dropdown-container ${isDropdownOpen ? 'open' : ''}`} ref={dropdownRef}>
             <button 
-              className={`toggle-option ${role === 'student' ? 'active' : ''}`}
-              onClick={() => { setRole('student'); setActiveTab('peer_threads'); }}
+              className="hash-pill" 
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--pill-bg)', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '6px 14px', cursor: 'pointer', outline: 'none' }}
+              title="Click to view actions and session status"
             >
-              <User size={15} />
-              <span>Student</span>
+              <span className="animate-icon-user"><User size={13} style={{ color: 'var(--text-subtle)' }} /></span>
+              <span className="hash-value" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>{sessionHash}</span>
+              <span style={{ fontSize: '0.6rem', color: 'var(--text-subtle)', marginLeft: '2px' }}>▼</span>
             </button>
-            <button 
-              className={`toggle-option ${role === 'counselor' ? 'active' : ''}`}
-              onClick={() => { setRole('counselor'); setActiveTab('counselor_triage'); }}
-            >
-              <ShieldCheck size={15} />
-              <span>Counselor</span>
-            </button>
+
+            <div className="dropdown-menu">
+              {role === 'student' && (
+                <>
+                  <button className="dropdown-item" onClick={() => { setIsDropdownOpen(false); setIsSafetyPlanModalOpen(true); }}>
+                    <span className="animate-icon-lock"><Shield size={14} color="#10b981" /></span>
+                    <span>Safety Plan</span>
+                  </button>
+                  <button className="dropdown-item" onClick={() => { setIsDropdownOpen(false); setIsAppointmentModalOpen(true); }}>
+                    <span className="animate-icon-user"><Calendar size={14} color="#0284c7" /></span>
+                    <span>Book Counselor</span>
+                  </button>
+                  <button className="dropdown-item" onClick={() => { setIsDropdownOpen(false); setIsCrisisModalOpen(true); }} style={{ color: 'var(--restrained-red)' }}>
+                    <span className="animate-icon-alert"><AlertTriangle size={14} color="var(--restrained-red)" /></span>
+                    <span style={{ fontWeight: 600 }}>Crisis Helplines</span>
+                  </button>
+                  <div className="dropdown-divider" />
+                </>
+              )}
+
+              <button className="dropdown-item" onClick={() => { setIsDropdownOpen(false); setIsFerpaModalOpen(true); }}>
+                <span className="animate-icon-heart"><CheckCircle size={14} color="var(--safety-green)" /></span>
+                <span>FERPA Status</span>
+              </button>
+
+              <button className="dropdown-item" onClick={() => { setIsDropdownOpen(false); toggleTheme(); }}>
+                <span className="animate-icon-settings">{theme === 'light' ? <Moon size={14} /> : <Sun size={14} />}</span>
+                <span>{theme === 'light' ? 'Dark Mode' : 'Light Mode'}</span>
+              </button>
+
+              <button className="dropdown-item" onClick={() => { setIsDropdownOpen(false); resetDemoData(); }}>
+                <span className="animate-icon-refresh"><RotateCcw size={14} /></span>
+                <span>Reset Demo Data</span>
+              </button>
+
+              <button className="dropdown-item" onClick={() => { setIsDropdownOpen(false); rotateSessionHash(); }} title="Rotate session hash for complete anonymity">
+                <span className="animate-icon-refresh"><RefreshCw size={14} /></span>
+                <span>Rotate Identity Token</span>
+              </button>
+
+              <div className="dropdown-divider" />
+
+              <button className="dropdown-item" onClick={() => { setIsDropdownOpen(false); logout(); }} style={{ color: '#e11d48' }}>
+                <span className="animate-icon-arrow-right"><LogOut size={14} /></span>
+                <span>Sign Out</span>
+              </button>
+            </div>
           </div>
-
-          {/* Cryptographic Session Hash Pill */}
-          <div className="hash-pill" title="Cryptographically rotated anonymous session identifier">
-            <span className="hash-label">Session:</span>
-            <span className="hash-value">{sessionHash}</span>
-            <button className="hash-rotate-btn" onClick={rotateSessionHash} title="Rotate session hash for complete anonymity">
-              <RefreshCw size={13} />
-            </button>
-          </div>
-
-          {/* FERPA Quick Verifier Button */}
-          <button 
-            className="ferpa-header-btn" 
-            onClick={() => setIsFerpaModalOpen(true)}
-            title="FERPA & HIPAA Compliance Audited"
-          >
-            <CheckCircle size={14} color="#10b981" />
-            <span>FERPA</span>
-          </button>
-
-          {/* Reset Demo Button */}
-          <button 
-            className="reset-demo-btn" 
-            onClick={resetDemoData}
-            title="Reset to clean demo data state for presentation"
-          >
-            <RotateCcw size={14} />
-          </button>
-
-          {/* Dark / Light Theme Toggle */}
-          <button className="theme-toggle-btn" onClick={toggleTheme} title="Toggle Dark/Light Theme">
-            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-          </button>
         </div>
       </div>
     </header>
