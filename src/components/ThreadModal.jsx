@@ -72,7 +72,7 @@ export default function ThreadModal() {
           {/* Counselor Response Helper (Visible in Counselor mode) */}
           {role === 'counselor' && (
             <div className="counselor-assistant-box">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', color: '#1e4d40', fontWeight: 600, fontSize: '0.85rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', color: 'var(--primary-teal)', fontWeight: 600, fontSize: '0.85rem' }}>
                 <ShieldCheck size={16} />
                 <span>Verified Counselor Rapid Response Templates</span>
               </div>
@@ -134,5 +134,4 @@ export default function ThreadModal() {
       </div>
     </div>
   );
-  // .
 }

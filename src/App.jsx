@@ -11,8 +11,6 @@ import CreatePostModal from './components/CreatePostModal';
 import ThreadModal from './components/ThreadModal';
 import AppointmentModal from './components/AppointmentModal';
 import ComplianceModal from './components/ComplianceModal';
-import BreathingModal from './components/BreathingModal';
-import MoodTrackerModal from './components/MoodTrackerModal';
 import ResourceLibraryModal from './components/ResourceLibraryModal';
 import SafetyPlanModal from './components/SafetyPlanModal';
 import TelehealthRoomModal from './components/TelehealthRoomModal';
@@ -23,6 +21,10 @@ import ModerationHub from './components/ModerationHub';
 import FloatingAIAssistant from './components/FloatingAIAssistant';
 import Toast from './components/Toast';
 
+// Inline Tab Views
+import ArticlesTab from './components/ArticlesTab';
+import ResourcesTab from './components/ResourcesTab';
+
 import { 
   Plus, 
   CheckCircle, 
@@ -30,12 +32,11 @@ import {
   Calendar,
   AlertTriangle,
   X,
-  Smile,
   BookOpen,
   BarChart3,
-  Flame,
   Shield,
-  ShieldAlert
+  ShieldAlert,
+  RefreshCw
 } from 'lucide-react';
 import { CATEGORIES } from './types';
 
@@ -49,17 +50,17 @@ function MainAppContent() {
     setSelectedCategory, 
     posts, 
     myPostIds,
-    streakCount,
     setIsCreateModalOpen,
     setIsCrisisModalOpen,
     isCrisisModalOpen,
     setIsFerpaModalOpen,
     setIsAppointmentModalOpen,
-    setIsMoodModalOpen,
-    setIsResourceModalOpen,
     setIsSafetyPlanModalOpen,
     setIsPrivacyModalOpen,
-    isPrivacyModalOpen
+    isPrivacyModalOpen,
+    userAuth,
+    sessionHash,
+    rotateSessionHash
   } = useApp();
 
   if (!isAuthenticated) {
@@ -93,141 +94,129 @@ function MainAppContent() {
       {/* Toast Notification Container */}
       <Toast />
 
-      {/* Header Bar */}
-      <Header />
-
-      {/* Real-time Crisis Safety Banner */}
+      {/* Real-time Crisis Safety Banner (FIRST FROM TOP) */}
       <CrisisBanner />
+
+      {/* Header Bar (SECOND) */}
+      <Header />
 
       {/* Main Content Area */}
       <main className="main-content">
         {role === 'student' ? (
           <>
-            {/* Hero Section */}
-            <section className="hero-section">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-                <div>
-                  <h1 className="hero-title">Your safe space to share</h1>
-                  <p className="hero-subtitle">
-                    Everything you post is anonymous & protected. Verified counselors & AI safety triage are here to support you.
-                  </p>
-                </div>
-
-                {/* Mood Tracker Streak Pill */}
+            {/* Simplified Greeting Section (Low Cognitive Load) */}
+            <div className="simplified-greeting-card">
+              <div className="greeting-text-area">
+                <h1>Welcome back, {userAuth?.isGuest ? 'Student' : userAuth?.displayName?.replace('Student ', '') || 'Student'}!</h1>
+                <p>Confidential support portal for Kwame Nkrumah University of Science and Technology.</p>
+              </div>
+              <div className="greeting-session-pill">
+                <span className="greeting-session-label">Session ID:</span>
+                <code className="greeting-session-code">{sessionHash}</code>
                 <button 
-                  className="hero-streak-card" 
-                  onClick={() => setIsMoodModalOpen(true)}
-                  title="Click to log daily mood & gratitude"
+                  onClick={rotateSessionHash} 
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', color: 'var(--text-subtle)' }}
+                  title="Rotate session token hash for absolute confidentiality"
                 >
-                  <Flame size={20} fill="#f59e0b" color="#f59e0b" />
-                  <div>
-                    <span className="hero-streak-count">{streakCount} Day Streak</span>
-                    <span className="hero-streak-sub">Daily Mood Tracker</span>
-                  </div>
+                  <span className="animate-icon-refresh"><RefreshCw size={13} /></span>
                 </button>
               </div>
-            </section>
+            </div>
 
             {/* Sub-Navigation Pills Bar */}
             <div className="sub-nav-container">
-              <div className="sub-nav-bar">
-                <button 
-                  className={`sub-nav-btn ${activeTab === 'peer_threads' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('peer_threads')}
-                >
-                  Peer Threads
-                </button>
-                
-                <button 
-                  className={`sub-nav-btn ${activeTab === 'share_anonymous' ? 'active' : ''}`}
-                  onClick={() => setIsCreateModalOpen(true)}
-                >
-                  <Plus size={16} />
-                  Share Anonymously
-                </button>
-
-                <button 
-                  className={`sub-nav-btn ${activeTab === 'my_posts' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('my_posts')}
-                >
-                  My Posts {myPostIds.length > 0 && `(${myPostIds.length})`}
-                </button>
-
-                <button 
-                  className="sub-nav-btn"
-                  onClick={() => setIsMoodModalOpen(true)}
-                  style={{ color: '#d97706' }}
-                >
-                  <Smile size={15} />
-                  Daily Mood Log
-                </button>
-
-                <button 
-                  className="sub-nav-btn"
-                  onClick={() => setIsResourceModalOpen(true)}
-                  style={{ color: '#0284c7' }}
-                >
-                  <BookOpen size={15} />
-                  Resource Library
-                </button>
-
-                <button 
-                  className="sub-nav-btn"
-                  onClick={() => setIsSafetyPlanModalOpen(true)}
-                  style={{ color: '#10b981' }}
-                >
-                  <Shield size={15} />
-                  Emergency Safety Net
-                </button>
-
-                <button 
-                  className="sub-nav-btn counselor-action"
-                  onClick={() => setIsAppointmentModalOpen(true)}
-                >
-                  <Calendar size={15} />
-                  Book Telehealth Counselor
-                </button>
-              </div>
-            </div>
-
-            {/* Tag Pills Filter Row */}
-            <div className="tags-scroll-row">
-              {CATEGORIES.map(category => (
-                <button
-                  key={category}
-                  className={`tag-pill ${selectedCategory === category ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-
-            {/* Posts Feed */}
-            {filteredPosts.length > 0 ? (
-              <div className="posts-feed">
-                {filteredPosts.map(post => (
-                  <PostCard key={post.id} post={post} />
-                ))}
-              </div>
-            ) : (
-              <div className="empty-state-box">
-                <HelpCircle size={40} color="#94a3b8" style={{ marginBottom: '12px' }} />
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '6px' }}>No threads found</h3>
-                <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '16px' }}>
-                  {activeTab === 'my_posts' ? "You haven't posted any anonymous threads yet." : `No posts currently under category "${selectedCategory}".`}
-                </p>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-                  <button className="btn-primary" style={{ width: 'auto' }} onClick={() => setIsCreateModalOpen(true)}>
-                    <Plus size={16} /> Share a thread anonymously
+              <div className="sub-nav-bar-wrapper" data-active-tab={activeTab}>
+                <div className="sub-nav-bar">
+                  <button 
+                    className={`sub-nav-btn ${activeTab === 'articles' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('articles')}
+                  >
+                    Articles & Goodwill
                   </button>
-                  {selectedCategory !== 'All' && (
-                    <button className="sub-nav-btn" style={{ background: 'var(--pill-bg)' }} onClick={() => setSelectedCategory('All')}>
-                      View All Threads
-                    </button>
-                  )}
+
+                  <button 
+                    className={`sub-nav-btn ${activeTab === 'resources' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('resources')}
+                  >
+                    Resources
+                  </button>
+
+                  <button 
+                    className={`sub-nav-btn ${activeTab === 'peer_threads' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('peer_threads')}
+                  >
+                    Peer Threads
+                  </button>
+                  
+                  <button 
+                    className="sub-nav-btn"
+                    onClick={() => setIsCreateModalOpen(true)}
+                    style={{ color: 'var(--primary-teal)', fontWeight: 600 }}
+                  >
+                    <Plus size={16} />
+                    Share Anonymously
+                  </button>
+
+                  <button 
+                    className={`sub-nav-btn ${activeTab === 'my_posts' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('my_posts')}
+                  >
+                    My Posts {myPostIds.length > 0 && `(${myPostIds.length})`}
+                  </button>
                 </div>
+                <div className="sub-nav-slider-line" />
               </div>
+            </div>
+
+            {/* Inline Articles Tab */}
+            {activeTab === 'articles' && <ArticlesTab />}
+
+            {/* Inline Resources Tab */}
+            {activeTab === 'resources' && <ResourcesTab />}
+
+            {/* Peer Threads & My Posts Feed View */}
+            {(activeTab === 'peer_threads' || activeTab === 'my_posts') && (
+              <>
+                {/* Tag Pills Filter Row */}
+                <div className="tags-scroll-row">
+                  {CATEGORIES.map(category => (
+                    <button
+                      key={category}
+                      className={`tag-pill ${selectedCategory === category ? 'active' : ''}`}
+                      onClick={() => setSelectedCategory(category)}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Posts Feed */}
+                {filteredPosts.length > 0 ? (
+                  <div className="posts-feed">
+                    {filteredPosts.map(post => (
+                      <PostCard key={post.id} post={post} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="empty-state-box">
+                    <HelpCircle size={40} color="#94a3b8" style={{ marginBottom: '12px' }} />
+                    <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '6px' }}>No threads found</h3>
+                    <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '16px' }}>
+                      {activeTab === 'my_posts' ? "You haven't posted any anonymous threads yet." : `No posts currently under category "${selectedCategory}".`}
+                    </p>
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+                      <button className="btn-primary" style={{ width: 'auto' }} onClick={() => setIsCreateModalOpen(true)}>
+                        <Plus size={16} /> Share a thread anonymously
+                      </button>
+                      {selectedCategory !== 'All' && (
+                        <button className="sub-nav-btn" style={{ background: 'var(--pill-bg)' }} onClick={() => setSelectedCategory('All')}>
+                          View All Threads
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </>
         ) : (
@@ -275,8 +264,6 @@ function MainAppContent() {
       <ThreadModal />
       <AppointmentModal />
       <ComplianceModal />
-      <BreathingModal />
-      <MoodTrackerModal />
       <ResourceLibraryModal />
       <SafetyPlanModal />
       <TelehealthRoomModal />
@@ -293,33 +280,33 @@ function MainAppContent() {
               </button>
             </div>
             <div className="modal-body">
-              <div style={{ background: '#fff1f2', border: '1px solid #fecdd3', padding: '16px', borderRadius: '12px', marginBottom: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#e11d48', fontWeight: 700, marginBottom: '4px' }}>
+              <div style={{ background: 'var(--restrained-red-light)', border: '1px solid rgba(220, 38, 38, 0.2)', padding: '16px', borderRadius: '12px', marginBottom: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--restrained-red)', fontWeight: 700, marginBottom: '4px' }}>
                   <AlertTriangle size={18} />
                   <span>Immediate Crisis Support Available 24/7</span>
                 </div>
-                <p style={{ fontSize: '0.875rem', color: '#9f1239', lineHeight: 1.5, margin: 0 }}>
+                <p style={{ fontSize: '0.875rem', color: 'var(--restrained-red-dark)', lineHeight: 1.5, margin: 0 }}>
                   If you or someone you know is in immediate distress, please connect with professional emergency resources immediately.
                 </p>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <div style={{ border: '1px solid #e2e8f0', padding: '14px 16px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ border: '1px solid var(--border-color)', padding: '14px 16px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div>
                     <h4 style={{ fontWeight: 600, fontSize: '0.95rem' }}>Campus 24/7 Emergency Helpline</h4>
-                    <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0 }}>Free confidential hotline for students</p>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>Free confidential hotline for students</p>
                   </div>
-                  <a href="tel:18005550199" style={{ background: '#1e4d40', color: '#fff', padding: '8px 14px', borderRadius: '9999px', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}>
+                  <a href="tel:18005550199" style={{ background: 'var(--primary-teal)', color: '#fff', padding: '8px 14px', borderRadius: '9999px', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}>
                     Call 1-800-555-0199
                   </a>
                 </div>
 
-                <div style={{ border: '1px solid #e2e8f0', padding: '14px 16px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ border: '1px solid var(--border-color)', padding: '14px 16px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div>
                     <h4 style={{ fontWeight: 600, fontSize: '0.95rem' }}>National Crisis Text Line</h4>
-                    <p style={{ fontSize: '0.85rem', color: '#64748b', margin: 0 }}>Text HOME to 741741 for 24/7 support</p>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>Text HOME to 741741 for 24/7 support</p>
                   </div>
-                  <span style={{ fontWeight: 600, color: '#1e4d40', fontSize: '0.9rem' }}>Text 741741</span>
+                  <span style={{ fontWeight: 600, color: 'var(--primary-teal)', fontSize: '0.9rem' }}>Text 741741</span>
                 </div>
 
                 <div style={{ border: '1px solid #e2e8f0', padding: '14px 16px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -349,7 +336,7 @@ function MainAppContent() {
             </div>
             <div className="modal-body">
               <p style={{ fontSize: '0.9rem', color: '#334155', lineHeight: 1.6, marginBottom: '12px' }}>
-                MindSpace is designed ground-up for complete student privacy. Peer threads use randomized SHA-256 session hashes (e.g., Anon#4821) refreshed regularly. IP logging is permanently disabled, and end-to-end encryption protects peer communications.
+                Haven KNUST is designed ground-up for complete student privacy. Peer threads use randomized SHA-256 session hashes (e.g., Anon#4821) refreshed regularly. IP logging is permanently disabled, and end-to-end encryption protects peer communications.
               </p>
             </div>
           </div>

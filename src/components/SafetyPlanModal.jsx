@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Shield, Phone, Heart, Home, Save, Printer } from 'lucide-react';
+import { X, Shield, Phone, Heart, Home, Save, Printer, Lock } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export default function SafetyPlanModal() {
@@ -49,7 +49,10 @@ export default function SafetyPlanModal() {
 
         <form onSubmit={onSubmit} className="modal-body">
           <div style={{ background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '12px', borderRadius: '10px', marginBottom: '18px', fontSize: '0.85rem', color: '#065f46', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span>🔒 Confidential personal safety plan bound to Session Hash: <strong>{sessionHash}</strong></span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span className="animate-icon-lock"><Lock size={13} /></span>
+              <span>Confidential personal safety plan bound to Session Hash: <strong>{sessionHash}</strong></span>
+            </span>
             <button type="button" onClick={handlePrintPlan} style={{ background: '#ffffff', color: '#065f46', border: '1px solid #a7f3d0', padding: '4px 10px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Printer size={13} /> Print Safety Card
             </button>

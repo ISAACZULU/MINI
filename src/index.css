@@ -1,22 +1,45 @@
 /* MindSpace Enterprise Design System & Custom CSS */
 :root {
-  --primary-teal: #1e4d40;
-  --primary-teal-hover: #163b31;
-  --primary-teal-light: #e8f3f0;
-  --bg-canvas: #f8fafc;
-  --card-bg: #ffffff;
-  --border-color: #e2e8f0;
-  --border-subtle: #f1f5f9;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --text-subtle: #94a3b8;
-  --pill-bg: #eef2f6;
+  /* 60% Dominant (Calming warm neutral backgrounds to prevent eye strain) */
+  --bg-canvas: #faf8f5;          /* Calming warm neutral off-white/ivory */
+  --card-bg: #ffffff;            /* Pure white for panels and cards */
+  --border-color: #e6e4df;       /* Soft warm gray border */
+  --border-subtle: #f3f2ed;      /* Subtle border contrast */
+  --pill-bg: #efede7;            /* Soft warm neutral pill */
   --pill-active: #ffffff;
-  --rose-accent: #f43f5e;
-  --rose-light: #fff1f2;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  /* 30% Secondary (Trust & Stability - Soft Blues and Muted Greens) */
+  --primary-teal: #1a535c;       /* Calming deep teal (muted green/blue) */
+  --primary-teal-hover: #113c43;
+  --primary-teal-light: #eaf2f2; /* Soft blue-green tint for backdrops */
+  --primary-blue: #2c5282;       /* Soft trust blue */
+  --primary-green: #2d6a4f;      /* Calming muted forest/nature green */
+  --text-main: #1e293b;          /* Dark slate gray (highly legible, low glare) */
+  --text-muted: #576574;         /* Muted gray for description text */
+  --text-subtle: #8395a7;        /* Subtle gray for secondary labels */
+
+  /* 10% Accent (Functional Alerts - safety green, caution yellow, alert red) */
+  --safety-green: #10b981;       /* Safe zones, secure area, positive updates */
+  --safety-green-hover: #059669;
+  --safety-green-light: #ecfdf5;
+  --safety-green-dark: #065f46;
+
+  --alert-yellow: #d97706;       /* Notice, warnings without panic */
+  --alert-yellow-light: #fffbeb;
+  --alert-yellow-dark: #92400e;
+
+  --restrained-red: #dc2626;      /* Strictly for emergency, grabs focus cleanly */
+  --restrained-red-hover: #b91c1c;
+  --restrained-red-light: #fef2f2;
+  --restrained-red-dark: #991b1b;
+
+  /* Legacy mapping support so we don't break existing rose declarations */
+  --rose-accent: var(--restrained-red);
+  --rose-light: var(--restrained-red-light);
+
+  --shadow-sm: 0 1px 3px rgba(30, 41, 59, 0.04);
+  --shadow-md: 0 4px 14px rgba(30, 41, 59, 0.03);
+  --shadow-lg: 0 10px 30px rgba(30, 41, 59, 0.06);
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 20px;
@@ -24,19 +47,41 @@
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Dark Mode Tokens */
+/* Dark Mode Tokens (Implementing dark 60-30-10) */
 .dark-mode {
-  --bg-canvas: #0f172a;
-  --card-bg: #1e293b;
-  --border-color: #334155;
-  --border-subtle: #1e293b;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --text-subtle: #64748b;
-  --pill-bg: #1e293b;
-  --pill-active: #334155;
-  --rose-accent: #fb7185;
-  --rose-light: rgba(244, 63, 94, 0.15);
+  /* 60% Dominant (Dark Slate neutral to prevent glare) */
+  --bg-canvas: #0f1319;          /* Calm dark slate/navy */
+  --card-bg: #161c23;            /* Darker slate panel */
+  --border-color: #27303c;       /* Muted border */
+  --border-subtle: #192029;
+  --pill-bg: #1e2630;
+  --pill-active: #2a3543;
+  --text-main: #f1f5f9;          /* High contrast light gray, low fatigue */
+  --text-muted: #8e9fae;
+  --text-subtle: #607382;
+
+  /* 30% Secondary (Calming dark blue-greens) */
+  --primary-teal: #267380;       /* Soft blue-green, readable in dark */
+  --primary-teal-hover: #328b9a;
+  --primary-teal-light: rgba(38, 115, 128, 0.12);
+  --primary-blue: #4299e1;
+  --primary-green: #48bb78;
+
+  /* 10% Accents in Dark mode */
+  --safety-green: #34d399;
+  --safety-green-light: rgba(52, 211, 153, 0.1);
+  --safety-green-dark: #34d399;
+
+  --alert-yellow: #fbbf24;
+  --alert-yellow-light: rgba(251, 191, 36, 0.1);
+  --alert-yellow-dark: #fbbf24;
+
+  --restrained-red: #f87171;
+  --restrained-red-light: rgba(248, 113, 113, 0.1);
+  --restrained-red-dark: #f87171;
+
+  --rose-accent: var(--restrained-red);
+  --rose-light: var(--restrained-red-light);
 }
 
 * {
@@ -215,7 +260,7 @@ button,
 }
 
 .floating-ai-fab {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, var(--safety-green), var(--safety-green-hover));
   color: #ffffff;
   padding: 8px 16px 8px 8px;
   border-radius: var(--radius-pill);
@@ -290,7 +335,7 @@ button,
 .ai-avatar-badge {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #10b981, #047857);
+  background: linear-gradient(135deg, var(--safety-green), var(--safety-green-hover));
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -331,8 +376,8 @@ button,
 }
 
 .ai-chip:hover {
-  border-color: #10b981;
-  color: #10b981;
+  border-color: var(--safety-green);
+  color: var(--safety-green);
 }
 
 .ai-drawer-body {
@@ -362,7 +407,7 @@ button,
 .msg-avatar {
   width: 26px;
   height: 26px;
-  background: #10b981;
+  background: var(--safety-green);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -443,11 +488,11 @@ button,
 }
 
 .ai-input:focus {
-  border-color: #10b981;
+  border-color: var(--safety-green);
 }
 
 .ai-send-btn {
-  background: #10b981;
+  background: var(--safety-green);
   color: #ffffff;
   padding: 8px;
   border-radius: 50%;
@@ -526,7 +571,7 @@ button,
 }
 
 .enterprise-pill {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, var(--safety-green), var(--safety-green-hover));
   color: #ffffff;
   font-size: 0.65rem;
   font-weight: 700;
@@ -551,7 +596,7 @@ button,
 .breathing-header-btn {
   background-color: rgba(5, 150, 105, 0.1);
   border: 1px solid rgba(5, 150, 105, 0.25);
-  color: #059669;
+  color: var(--safety-green-hover);
   font-size: 0.8rem;
   font-weight: 600;
   padding: 6px 12px;
@@ -646,7 +691,7 @@ button,
 .ferpa-header-btn {
   background-color: rgba(16, 185, 129, 0.1);
   border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #059669;
+  color: var(--safety-green-hover);
   font-size: 0.775rem;
   font-weight: 700;
   padding: 6px 12px;
@@ -794,7 +839,7 @@ button,
 
 .dark-mode .crisis-safety-bar {
   background: linear-gradient(135deg, #4c0519, #881337);
-  border-bottom-color: #9f1239;
+  border-bottom-color: var(--restrained-red-dark);
 }
 
 .crisis-bar-inner {
@@ -816,7 +861,7 @@ button,
 .pulse-alert-icon {
   width: 32px;
   height: 32px;
-  background: #e11d48;
+  background: var(--restrained-red);
   color: #ffffff;
   border-radius: 50%;
   display: flex;
@@ -834,7 +879,7 @@ button,
 .crisis-title {
   font-weight: 700;
   font-size: 0.9rem;
-  color: #9f1239;
+  color: var(--restrained-red-dark);
   display: block;
 }
 
@@ -870,7 +915,7 @@ button,
 }
 
 .crisis-action-btn.primary {
-  background: #e11d48;
+  background: var(--restrained-red);
   color: #ffffff;
 }
 
@@ -880,7 +925,7 @@ button,
 
 .crisis-action-btn.secondary {
   background: #ffffff;
-  color: #e11d48;
+  color: var(--restrained-red);
   border: 1px solid #fecdd3;
 }
 
@@ -1008,7 +1053,7 @@ button,
 
 .analytics-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #0284c7, #10b981);
+  background: linear-gradient(90deg, #0284c7, var(--safety-green));
   border-radius: var(--radius-pill);
   transition: width 0.4s ease;
 }
@@ -1025,7 +1070,7 @@ button,
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, var(--safety-green), var(--safety-green-hover));
   box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
   display: flex;
   flex-direction: column;
@@ -1049,7 +1094,7 @@ button,
 
 .breathing-circle.exhale.animating {
   transform: scale(0.9);
-  background: linear-gradient(135deg, #10b981, #047857);
+  background: linear-gradient(135deg, var(--safety-green), var(--safety-green-hover));
   box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
 }
 
@@ -1224,7 +1269,7 @@ button,
 
 .badge-crisis {
   background-color: #ffe4e6;
-  color: #e11d48;
+  color: var(--restrained-red);
   border-color: #fecdd3;
 }
 .dark-mode .badge-crisis {
@@ -1257,13 +1302,13 @@ button,
 
 .badge-low {
   background-color: #d1fae5;
-  color: #059669;
+  color: var(--safety-green-hover);
   border-color: #a7f3d0;
 }
 .dark-mode .badge-low {
   background-color: rgba(5, 150, 105, 0.2);
   color: #6ee7b7;
-  border-color: #047857;
+  border-color: var(--safety-green-hover);
 }
 
 .counselor-reply-pill {
@@ -1446,9 +1491,15 @@ button,
 
 .close-btn {
   color: var(--text-muted);
-  padding: 4px;
+  padding: 8px;
   border-radius: 50%;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
 }
 
 .close-btn:hover {
@@ -1674,10 +1725,10 @@ button,
   gap: 12px;
 }
 
-.metric-crisis .metric-icon { color: #e11d48; }
+.metric-crisis .metric-icon { color: var(--restrained-red); }
 .metric-high .metric-icon { color: #d97706; }
 .metric-appointments .metric-icon { color: #0284c7; }
-.metric-speed .metric-icon { color: #10b981; }
+.metric-speed .metric-icon { color: var(--safety-green); }
 
 .metric-value {
   font-size: 1.35rem;
@@ -1770,7 +1821,7 @@ button,
 
 .triage-triggers-tag {
   background: rgba(225, 29, 72, 0.1);
-  color: #e11d48;
+  color: var(--restrained-red);
   font-size: 0.75rem;
   font-weight: 600;
   padding: 4px 8px;
@@ -1794,7 +1845,7 @@ button,
 
 .counselor-status-done {
   font-size: 0.75rem;
-  color: #10b981;
+  color: var(--safety-green);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -1842,7 +1893,7 @@ button,
 
 .appt-status-badge {
   background-color: #d1fae5;
-  color: #059669;
+  color: var(--safety-green-hover);
   font-size: 0.725rem;
   font-weight: 700;
   padding: 2px 8px;
@@ -1940,7 +1991,7 @@ button,
 }
 
 .ferpa-badge {
-  color: #10b981;
+  color: var(--safety-green);
   font-weight: 600;
 }
 
@@ -2235,7 +2286,7 @@ button,
 /* Soft Voice Speaking Badge & Live Mic Banner */
 .speaking-soft-badge {
   background-color: rgba(5, 150, 105, 0.15);
-  color: #059669;
+  color: var(--safety-green-hover);
   border: 1px solid rgba(5, 150, 105, 0.3);
   padding: 2px 8px;
   border-radius: var(--radius-pill);
@@ -2248,14 +2299,14 @@ button,
 
 .speaking-active-btn {
   background-color: #ffe4e6;
-  color: #e11d48;
+  color: var(--restrained-red);
   border-color: #fecdd3;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .speaking-active-btn:hover {
-  background-color: #e11d48;
+  background-color: var(--restrained-red);
   color: #ffffff;
 }
 
@@ -2278,7 +2329,7 @@ button,
 }
 
 .stop-reading-btn {
-  background-color: #e11d48;
+  background-color: var(--restrained-red);
   color: #ffffff;
   border-radius: var(--radius-pill);
   padding: 4px 10px;
@@ -2306,7 +2357,7 @@ button,
   padding: 8px 16px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #e11d48;
+  color: var(--restrained-red);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -2352,4 +2403,1096 @@ button,
     right: 16px;
     bottom: 80px;
   }
+}
+
+/* Premium Enhancements for Student Homepage Dashboard */
+
+.welcome-banner {
+  box-shadow: 0 4px 20px rgba(20, 184, 166, 0.04);
+  transition: all 0.3s ease;
+}
+
+.welcome-banner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(20, 184, 166, 0.08);
+}
+
+.goodwill-card {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.goodwill-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+}
+
+.article-row-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.article-row-card:hover {
+  transform: translateX(4px);
+  background-color: var(--pill-bg) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  border-color: var(--primary-teal) !important;
+}
+
+.resource-guide-card {
+  transition: all 0.2s ease !important;
+}
+
+.resource-guide-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.03);
+  border-color: var(--text-subtle) !important;
+}
+
+.resource-guide-card.selected:hover {
+  border-color: #0284c7 !important;
+}
+
+.guide-step-box {
+  transition: all 0.2s ease !important;
+}
+
+.guide-step-box:hover {
+  transform: translateX(2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+}
+
+.guide-step-box.completed {
+  border-color: var(--safety-green) !important;
+  opacity: 0.85;
+}
+
+/* Modal Body Article Format Override */
+.article-modal-body h4 {
+  border-left: 3px solid var(--primary-teal);
+  padding-left: 10px;
+}
+
+/* Animations */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Landing Page Restructure Styles */
+
+.landing-page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--body-bg);
+  color: var(--text-main);
+  font-family: var(--font-family);
+}
+
+.landing-crisis-banner button:hover {
+  background: #b91c1c !important;
+  transform: scale(1.02);
+}
+
+.landing-hero-section h1 {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.landing-hero-section button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.service-box {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.service-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+  border-color: var(--primary-teal) !important;
+}
+
+.dark-mode .service-box:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.landing-section {
+  transition: background-color 0.3s ease;
+}
+
+.landing-section:nth-of-type(even) {
+  background-color: var(--body-bg);
+}
+
+.landing-section:nth-of-type(odd) {
+  background-color: var(--card-bg);
+}
+
+/* Emergency contacts pulse on hover */
+.landing-section[style*="emergency-resources"] div > div {
+  transition: all 0.2s ease;
+}
+
+.landing-section[style*="emergency-resources"] div > div:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Modern Web Platform Upgrades */
+
+/* 1. Custom, CSS-native Scrollbars */
+* {
+  scrollbar-color: var(--primary-teal) var(--border-color);
+  scrollbar-width: thin;
+}
+
+/* 2. Typographic Layouts text wrapping */
+h1, h2, h3, h4, .brand-title, .modal-title, .role-card-title {
+  text-wrap: balance;
+}
+p, .hero-subtitle, .role-card-desc, .feedback-text {
+  text-wrap: pretty;
+}
+
+/* 3. Autosizing Form Field for Feedback */
+.form-input-autosize {
+  field-sizing: content;
+  min-height: 100px;
+}
+
+/* 4. Native Dialog styles and Top-Layer Animations */
+dialog.native-dialog {
+  border: none;
+  background: transparent;
+  padding: 0;
+  max-width: none;
+  max-height: none;
+  overflow: visible;
+  outline: none;
+  margin: auto;
+  z-index: 210;
+  
+  /* Mandatory allow-discrete transitions for open/close state of dialog */
+  transition-property: display, overlay;
+  transition-duration: 0.25s;
+  transition-behavior: allow-discrete;
+}
+
+/* Backdrop styling and transitions */
+dialog.native-dialog::backdrop {
+  background-color: rgba(15, 23, 42, 0);
+  backdrop-filter: blur(0px);
+  transition: 
+    background-color 0.25s ease, 
+    backdrop-filter 0.25s ease, 
+    display 0.25s allow-discrete, 
+    overlay 0.25s allow-discrete;
+}
+
+dialog.native-dialog[open]::backdrop {
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  
+  @starting-style {
+    background-color: rgba(15, 23, 42, 0);
+    backdrop-filter: blur(0px);
+  }
+}
+
+/* Modal Card animations inside dialog */
+dialog.native-dialog .modal-card {
+  transform: scale(0.92) translateY(12px);
+  opacity: 0;
+  transition: 
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), 
+    opacity 0.25s ease, 
+    display 0.25s allow-discrete, 
+    overlay 0.25s allow-discrete;
+}
+
+dialog.native-dialog[open] .modal-card {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  
+  @starting-style {
+    transform: scale(0.92) translateY(12px);
+    opacity: 0;
+  }
+}
+
+/* Form refinement: show invalid styling only after interaction (non-intrusive) */
+.form-input:user-invalid, .form-select:user-invalid {
+  border-color: #ef4444 !important;
+  background-color: rgba(239, 68, 68, 0.01) !important;
+}
+
+/* 5. Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  dialog.native-dialog,
+  dialog.native-dialog .modal-card,
+  dialog.native-dialog::backdrop {
+    transition-duration: 0.05s !important;
+  }
+  dialog.native-dialog .modal-card {
+    transform: none !important;
+  }
+  @starting-style {
+    dialog.native-dialog[open] .modal-card {
+      transform: none !important;
+    }
+  }
+}
+
+/* Kokonut UI & motion.dev Visual Additions */
+
+/* Bento Grid Layout */
+.bento-grid-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.bento-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px) scale(1.005);
+  box-shadow: var(--shadow-md), 0 8px 24px rgba(20, 184, 166, 0.05);
+  border-color: var(--primary-teal);
+}
+
+.welcome-card {
+  grid-column: span 6;
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.04) 0%, rgba(2, 132, 199, 0.04) 100%);
+}
+
+.identity-card {
+  grid-column: span 3;
+}
+
+.emergency-card {
+  grid-column: span 3;
+  background-color: rgba(239, 68, 68, 0.02);
+  border-color: rgba(239, 68, 68, 0.15);
+}
+
+.emergency-card:hover {
+  background-color: rgba(239, 68, 68, 0.04);
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: var(--shadow-md), 0 8px 24px rgba(239, 68, 68, 0.05);
+}
+
+/* Bento Card Text & Elements styling */
+.bento-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.bento-badge {
+  background: var(--primary-teal);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.05em;
+}
+
+.bento-badge-text {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.bento-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0 0 6px 0;
+  letter-spacing: -0.02em;
+}
+
+.bento-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.bento-card-hdr {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 10px 0;
+  letter-spacing: 0.05em;
+}
+
+.bento-card-hdr-alert {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ef4444;
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.bento-token-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--pill-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+}
+
+.bento-token {
+  font-size: 0.85rem;
+  font-weight: 750;
+  color: var(--primary-teal);
+  font-family: monospace;
+}
+
+.bento-rotate-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.bento-rotate-btn:hover {
+  color: var(--primary-teal);
+}
+
+.bento-rotate-btn:active svg {
+  animation: spin 0.5s ease-out;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.bento-token-sub {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin: 8px 0 0 0;
+  line-height: 1.3;
+}
+
+.bento-emergency-title {
+  margin: 0 0 4px 0;
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: var(--text-main);
+}
+
+.bento-emergency-desc {
+  margin: 0;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.bento-emergency-link {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #ef4444;
+  align-self: flex-start;
+  margin-top: 8px;
+  transition: transform 0.2s ease;
+}
+
+.bento-card:hover .bento-emergency-link {
+  transform: translateX(4px);
+}
+
+/* Sliding Tab Underline (motion.dev layout) */
+.sub-nav-bar-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.sub-nav-slider-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--primary-teal);
+  border-radius: var(--radius-pill);
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), width 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  pointer-events: none;
+}
+
+/* Tab underline mapping states */
+.sub-nav-bar-wrapper[data-active-tab="articles"] .sub-nav-slider-line {
+  transform: translateX(0px);
+  width: 154px;
+}
+
+.sub-nav-bar-wrapper[data-active-tab="resources"] .sub-nav-slider-line {
+  transform: translateX(170px);
+  width: 90px;
+}
+
+.sub-nav-bar-wrapper[data-active-tab="peer_threads"] .sub-nav-slider-line {
+  transform: translateX(276px);
+  width: 108px;
+}
+
+.sub-nav-bar-wrapper[data-active-tab="my_posts"] .sub-nav-slider-line {
+  /* Skipping Share Anonymously (index 3) which is positioned at 400px with 164px width */
+  transform: translateX(564px);
+  width: 102px;
+}
+
+/* Responsive adjustments for bento */
+@media (max-width: 1024px) {
+  .welcome-card { grid-column: span 12; }
+  .identity-card { grid-column: span 6; }
+  .emergency-card { grid-column: span 6; }
+  .sub-nav-slider-line { display: none; } /* Hide slide-bar on stacked vertical menus */
+}
+
+@media (max-width: 640px) {
+  .identity-card { grid-column: span 12; }
+  .emergency-card { grid-column: span 12; }
+}
+/* Animate-UI Inspired CSS Icon Animations */
+
+/* 1. Heart (Pulse/Heartbeat on hover) */
+.animate-icon-heart {
+  display: inline-flex;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.animate-icon-heart:hover {
+  animation: icon-heartbeat 0.8s infinite alternate ease-in-out;
+}
+@keyframes icon-heartbeat {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.18); }
+}
+
+/* 2. ArrowRight (Slide right on hover) */
+.animate-icon-arrow-right {
+  display: inline-flex;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.animate-icon-arrow-right:hover {
+  transform: translateX(4px);
+}
+
+/* 3. RefreshCw (Infinite spin on hover) */
+.animate-icon-refresh {
+  display: inline-flex;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.animate-icon-refresh:hover {
+  transform: rotate(180deg);
+}
+
+/* 4. Search (Scale/zoom lens slightly on hover) */
+.animate-icon-search {
+  display: inline-flex;
+  transition: transform 0.2s ease;
+}
+.animate-icon-search:hover {
+  transform: scale(1.15);
+}
+
+/* 5. Star (Rotate and scale slightly on hover) */
+.animate-icon-star {
+  display: inline-flex;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.animate-icon-star:hover {
+  transform: scale(1.2) rotate(15deg);
+}
+
+/* 6. Bell (Wiggle/ring on hover) */
+.animate-icon-bell {
+  display: inline-flex;
+}
+.animate-icon-bell:hover {
+  animation: icon-ring 0.6s ease-in-out;
+}
+@keyframes icon-ring {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(15deg); }
+  30% { transform: rotate(-12deg); }
+  45% { transform: rotate(10deg); }
+  60% { transform: rotate(-8deg); }
+  75% { transform: rotate(4deg); }
+  90% { transform: rotate(-2deg); }
+}
+
+/* 7. Settings (Gear spin on hover) */
+.animate-icon-settings {
+  display: inline-flex;
+  transition: transform 0.5s ease;
+}
+.animate-icon-settings:hover {
+  transform: rotate(90deg);
+}
+
+/* 8. User (Scale/bounce up on hover) */
+.animate-icon-user {
+  display: inline-flex;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.animate-icon-user:hover {
+  transform: translateY(-2px) scale(1.1);
+}
+
+/* 9. Lock (Shake slightly on hover) */
+.animate-icon-lock {
+  display: inline-flex;
+}
+.animate-icon-lock:hover {
+  animation: icon-shake 0.4s ease-in-out;
+}
+@keyframes icon-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-2px); }
+}
+
+/* 10. Close X (Rotate and scale slightly on hover) */
+.animate-icon-close {
+  display: inline-flex;
+  transition: transform 0.2s ease;
+}
+.animate-icon-close:hover {
+  transform: scale(0.9) rotate(90deg);
+}
+
+/* 11. AlertTriangle (Shake on hover) */
+.animate-icon-alert {
+  display: inline-flex;
+}
+.animate-icon-alert:hover {
+  animation: icon-shake 0.4s ease-in-out;
+}
+
+/* ==========================================================================
+   Mobile-First & Responsiveness Styles
+   ========================================================================== */
+
+/* 1. Default Desktop Grid Layouts */
+.resources-tab-view {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.triage-recommendations-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* 2. Responsive Breakpoint Media Queries */
+
+/* Tablet & Smaller Screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 16px;
+    align-items: center;
+  }
+  .header-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    gap: 8px;
+  }
+  .landing-header {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: center !important;
+    padding: 12px 16px !important;
+  }
+  .landing-header div {
+    justify-content: center;
+  }
+  .triage-recommendations-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile Screens (max-width: 640px) */
+@media (max-width: 640px) {
+  /* User-centered header actions clean mode */
+  .breathing-header-btn span:not([class*="animate-icon"]),
+  .ferpa-header-btn span:not([class*="animate-icon"]) {
+    display: none;
+  }
+  .breathing-header-btn, .ferpa-header-btn {
+    padding: 8px 10px !important;
+    justify-content: center;
+    font-size: 0.75rem;
+  }
+  
+  /* Resources Tab Grid Stacking */
+  .resources-tab-view {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Article rows stack */
+  .article-row-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .article-row-card div {
+    width: 100%;
+  }
+
+  /* Section padding and font sizes adjustment */
+  .landing-section {
+    padding: 32px 16px !important;
+  }
+  
+  /* Safe paddings for dialog boxes so they don't touch mobile screen edges */
+  dialog.native-dialog {
+    padding: 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  dialog.native-dialog .modal-card {
+    max-width: 100% !important;
+    max-height: 85vh;
+  }
+}
+
+/* 1. Heart (Pulse/Heartbeat on hover) */
+.animate-icon-heart {
+  display: inline-flex;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.animate-icon-heart:hover {
+  animation: icon-heartbeat 0.8s infinite alternate ease-in-out;
+}
+@keyframes icon-heartbeat {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.18); }
+}
+
+/* 2. ArrowRight (Slide right on hover) */
+.animate-icon-arrow-right {
+  display: inline-flex;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.animate-icon-arrow-right:hover {
+  transform: translateX(4px);
+}
+
+/* 3. RefreshCw (Infinite spin on hover) */
+.animate-icon-refresh {
+  display: inline-flex;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.animate-icon-refresh:hover {
+  transform: rotate(180deg);
+}
+
+/* 4. Search (Scale/zoom lens slightly on hover) */
+.animate-icon-search {
+  display: inline-flex;
+  transition: transform 0.2s ease;
+}
+.animate-icon-search:hover {
+  transform: scale(1.15);
+}
+
+/* 5. Star (Rotate and scale slightly on hover) */
+.animate-icon-star {
+  display: inline-flex;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.animate-icon-star:hover {
+  transform: scale(1.2) rotate(15deg);
+}
+
+/* 6. Bell (Wiggle/ring on hover) */
+.animate-icon-bell {
+  display: inline-flex;
+}
+.animate-icon-bell:hover {
+  animation: icon-ring 0.6s ease-in-out;
+}
+@keyframes icon-ring {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(15deg); }
+  30% { transform: rotate(-12deg); }
+  45% { transform: rotate(10deg); }
+  60% { transform: rotate(-8deg); }
+  75% { transform: rotate(4deg); }
+  90% { transform: rotate(-2deg); }
+}
+
+/* 7. Settings (Gear spin on hover) */
+.animate-icon-settings {
+  display: inline-flex;
+  transition: transform 0.5s ease;
+}
+.animate-icon-settings:hover {
+  transform: rotate(90deg);
+}
+
+/* 8. User (Scale/bounce up on hover) */
+.animate-icon-user {
+  display: inline-flex;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.animate-icon-user:hover {
+  transform: translateY(-2px) scale(1.1);
+}
+
+/* 9. Lock (Shake slightly on hover) */
+.animate-icon-lock {
+  display: inline-flex;
+}
+.animate-icon-lock:hover {
+  animation: icon-shake 0.4s ease-in-out;
+}
+@keyframes icon-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-2px); }
+}
+
+/* 10. Close X (Rotate and scale slightly on hover) */
+.animate-icon-close {
+  display: inline-flex;
+  transition: transform 0.2s ease;
+}
+.animate-icon-close:hover {
+  transform: scale(0.9) rotate(90deg);
+}
+
+/* 11. AlertTriangle (Shake on hover) */
+.animate-icon-alert {
+  display: inline-flex;
+}
+.animate-icon-alert:hover {
+  animation: icon-shake 0.4s ease-in-out;
+}
+
+/* ==========================================================================
+   Mobile-First & Responsiveness Styles
+   ========================================================================== */
+
+/* 1. Default Desktop Grid Layouts */
+.resources-tab-view {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.triage-recommendations-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* 2. Responsive Breakpoint Media Queries */
+
+/* Tablet & Smaller Screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 16px;
+    align-items: center;
+  }
+  .header-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    gap: 8px;
+  }
+  .landing-header {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: center !important;
+    padding: 12px 16px !important;
+  }
+  .landing-header div {
+    justify-content: center;
+  }
+  .triage-recommendations-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile Screens (max-width: 640px) */
+@media (max-width: 640px) {
+  /* User-centered header actions clean mode */
+  .breathing-header-btn span:not([class*="animate-icon"]),
+  .ferpa-header-btn span:not([class*="animate-icon"]) {
+    display: none;
+  }
+  .breathing-header-btn, .ferpa-header-btn {
+    padding: 8px 10px !important;
+    justify-content: center;
+    font-size: 0.75rem;
+  }
+  
+  /* Resources Tab Grid Stacking */
+  .resources-tab-view {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Article rows stack */
+  .article-row-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .article-row-card div {
+    width: 100%;
+  }
+
+  /* Section padding and font sizes adjustment */
+  .landing-section {
+    padding: 32px 16px !important;
+  }
+  
+  /* Safe paddings for dialog boxes so they don't touch mobile screen edges */
+  dialog.native-dialog {
+    padding: 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  dialog.native-dialog .modal-card {
+    max-width: 100% !important;
+    max-height: 85vh;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Sleek Dropdown Menu Styles (For collapsed Header Actions)
+   -------------------------------------------------------------------------- */
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 8px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 250;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+.dropdown-container.open .dropdown-menu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-item {
+  width: 100%;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.dropdown-item:hover {
+  background-color: var(--pill-bg);
+  color: var(--primary-teal);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 6px 0;
+}
+
+/* --------------------------------------------------------------------------
+   Interactive Tabbed Info Hub (Decluttering Landing Page)
+   -------------------------------------------------------------------------- */
+.info-hub-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.info-hub-tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--border-subtle);
+  overflow-x: auto;
+}
+
+.info-hub-tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 16px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.info-hub-tab-btn:hover {
+  color: var(--primary-teal);
+  background-color: rgba(26, 83, 92, 0.02);
+}
+
+.info-hub-tab-btn.active {
+  color: var(--primary-teal);
+  border-bottom-color: var(--primary-teal);
+  background-color: var(--card-bg);
+}
+
+.info-hub-content {
+  padding: 40px 32px;
+  min-height: 250px;
+}
+
+@media (max-width: 640px) {
+  .info-hub-content {
+    padding: 24px 16px;
+  }
+  .info-hub-tab-btn {
+    padding: 12px 14px;
+    font-size: 0.85rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Simplified Greeting Banner (Decluttering Student Homepage)
+   -------------------------------------------------------------------------- */
+.simplified-greeting-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.greeting-text-area h1 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 0 0 6px 0;
+}
+
+.greeting-text-area p {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.greeting-session-pill {
+  background-color: var(--pill-bg);
+  border: 1px solid var(--border-color);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.greeting-session-label {
+  font-size: 0.725rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.greeting-session-code {
+  font-family: monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--primary-teal);
 }

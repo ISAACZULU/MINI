@@ -1,5 +1,5 @@
 /**
- * MindSpace AI - Live Google Gemini Portal Service
+ * Haven KNUST AI - Live Google Gemini Portal Service
  * Direct integration with Google Gemini API with multi-model auto-discovery.
  */
 
@@ -39,12 +39,12 @@ export async function generateMentalHealthAIResponse(userMessage, conversationHi
     {
       role: 'user',
       parts: [{ 
-        text: "System Instruction: You are MindSpace AI, powered directly by Google Gemini. You are a natural, open, highly intelligent, and versatile AI assistant. Answer any user query on any topic (ADHD, studying, coding, science, general advice, math, creative ideas, casual chat, campus life, mental health) with deep intelligence, empathy, clear guidance, and human-like natural conversation." 
+        text: "System Instruction: You are Haven KNUST AI, powered directly by Google Gemini. You are a natural, open, highly intelligent, and versatile AI assistant. Answer any user query on any topic (ADHD, studying, coding, science, general advice, math, creative ideas, casual chat, campus life, mental health) with deep intelligence, empathy, clear guidance, and human-like natural conversation." 
       }]
     },
     {
       role: 'model',
-      parts: [{ text: "Understood! I am MindSpace AI, powered by Gemini. I am ready to answer any questions with deep insight, clarity, and empathy." }]
+      parts: [{ text: "Understood! I am Haven KNUST AI, powered by Gemini. I am ready to answer any questions with deep insight, clarity, and empathy." }]
     }
   ];
 
@@ -109,7 +109,7 @@ function getSmartFallbackResponse(query) {
   }
 
   if (q.match(/\b(hi|hello|hey|greetings|sup|yo)\b/)) {
-    return "Hello! I am MindSpace AI. How can I help you today?";
+    return "Hello! I am Haven KNUST AI. How can I help you today?";
   }
 
   return `I'm here to support you! Regarding your question on "${query}", feel free to ask me for detailed strategies, study tips, or explanations on any topic.`;
