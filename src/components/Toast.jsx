@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, Info, AlertTriangle } from 'lucide-react';
+import { IconlyCheckCircle, IconlyInfo, IconlyAlert } from './Iconly';
 import { useApp } from '../context/AppContext';
 
 export default function Toast() {
@@ -10,11 +10,11 @@ export default function Toast() {
   const renderIcon = () => {
     switch (toast.type) {
       case 'success':
-        return <CheckCircle2 size={18} color="#10b981" />;
+        return <IconlyCheckCircle size={18} color="var(--safety-green)" />;
       case 'warning':
-        return <AlertTriangle size={18} color="#f59e0b" />;
+        return <IconlyAlert size={18} color="var(--alert-yellow)" />;
       default:
-        return <Info size={18} color="#0284c7" />;
+        return <IconlyInfo size={18} color="var(--primary-blue)" />;
     }
   };
 

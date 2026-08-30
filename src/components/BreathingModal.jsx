@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Play, Pause, RefreshCw, Heart } from 'lucide-react';
+import { IconlyClose, IconlyPlay, IconlyPause, IconlyRefresh, IconlyHeart } from './Iconly';
 import { useApp } from '../context/AppContext';
 
 export default function BreathingModal() {
@@ -50,14 +50,14 @@ export default function BreathingModal() {
 
   return (
     <div className="modal-overlay" onClick={() => setIsBreathingModalOpen(false)}>
-      <div className="modal-card" onClick={e => e.stopPropagation()} style={{ textAlign: 'center', maxWidth: '480px' }}>
+      <div className="modal-card" onClick={e => e.stopPropagation()} style={{ textAlign: 'center', maxWidth: '480px', width: '90%' }}>
         <div className="modal-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#10b981' }}>
-            <Heart size={20} fill="#10b981" />
-            <h3 className="modal-title">4-7-8 Guided Breathing Relief</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--safety-green)' }}>
+            <IconlyHeart size={20} fill="var(--safety-green)" />
+            <h3 className="modal-title" style={{ color: 'var(--text-main)' }}>4-7-8 Guided Breathing Relief</h3>
           </div>
           <button className="close-btn" onClick={() => setIsBreathingModalOpen(false)}>
-            <X size={20} />
+            <IconlyClose size={20} />
           </button>
         </div>
 
@@ -84,7 +84,7 @@ export default function BreathingModal() {
               style={{ width: 'auto', padding: '10px 24px' }}
               onClick={() => setIsRunning(!isRunning)}
             >
-              {isRunning ? <Pause size={16} /> : <Play size={16} />}
+              {isRunning ? <IconlyPause size={16} /> : <IconlyPlay size={16} />}
               <span>{isRunning ? 'Pause' : 'Resume'}</span>
             </button>
 
@@ -92,7 +92,7 @@ export default function BreathingModal() {
               className="sub-nav-btn" 
               onClick={() => { setPhase('Inhale'); setSeconds(4); setIsRunning(true); }}
             >
-              <RefreshCw size={15} />
+              <IconlyRefresh size={15} />
               <span>Reset</span>
             </button>
           </div>

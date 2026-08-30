@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { BookOpen, Heart, Sparkles, User, Calendar, Clock, X, ChevronRight } from 'lucide-react';
+import { 
+  IconlyDocument, 
+  IconlyHeart, 
+  IconlyStar, 
+  IconlyUser, 
+  IconlyCalendar, 
+  IconlyClock, 
+  IconlyClose, 
+  IconlyChevronRight 
+} from './Iconly';
 
 const GOODWILL_MESSAGES = [
   {
@@ -90,9 +99,9 @@ export default function ArticlesTab() {
   return (
     <div className="articles-tab-view animate-fade-in">
       {/* Goodwill Board */}
-      <section className="goodwill-section" style={{ marginBottom: '32px' }}>
+      <section className="goodwill-section" style={{ marginBottom: '64px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-          <Sparkles size={20} color="var(--primary-teal)" />
+          <IconlyStar size={20} color="var(--primary-teal)" />
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-main)' }}>Daily Encouragements & Goodwill</h2>
         </div>
         
@@ -103,7 +112,7 @@ export default function ArticlesTab() {
               className="goodwill-card" 
               style={{ 
                 background: msg.color, 
-                borderLeft: `4px solid ${msg.textColor}`,
+                border: 'none',
                 padding: '20px',
                 borderRadius: '12px',
                 display: 'flex',
@@ -133,7 +142,7 @@ export default function ArticlesTab() {
                   alignItems: 'center', 
                   justifyContent: 'center' 
                 }}>
-                  <User size={14} />
+                  <IconlyUser size={14} />
                 </div>
                 <div>
                   <h4 style={{ margin: 0, fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>{msg.author}</h4>
@@ -148,11 +157,11 @@ export default function ArticlesTab() {
       {/* Counselor Articles Feed */}
       <section className="counselor-articles-section">
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-          <BookOpen size={20} color="var(--primary-teal)" />
+          <IconlyDocument size={20} color="var(--primary-teal)" />
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-main)' }}>Psychoeducational Articles from Counselors</h2>
         </div>
 
-        <div className="articles-grid" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div className="articles-grid">
           {ARTICLES_DATA.map((art) => (
             <div 
               key={art.id} 
@@ -163,7 +172,7 @@ export default function ArticlesTab() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                   <span className="category-badge" style={{ fontSize: '0.75rem', padding: '2px 8px' }}>{art.category}</span>
                   <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <Clock size={12} /> {art.readTime}
+                    <IconlyClock size={12} /> {art.readTime}
                   </span>
                 </div>
                 <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: '0 0 8px 0', color: 'var(--text-main)' }}>{art.title}</h3>
@@ -173,7 +182,7 @@ export default function ArticlesTab() {
                   <span style={{ fontSize: '0.8rem', color: 'var(--primary-teal)', fontWeight: 600 }}>{art.author}</span>
                 </div>
               </div>
-              <ChevronRight size={20} color="var(--text-muted)" style={{ flexShrink: 0 }} />
+              <IconlyChevronRight size={20} color="var(--text-muted)" style={{ flexShrink: 0 }} />
             </div>
           ))}
         </div>
@@ -183,7 +192,7 @@ export default function ArticlesTab() {
       {selectedArticle && (
         <div className="modal-overlay" onClick={() => setSelectedArticle(null)}>
           <div className="modal-card modal-large" onClick={e => e.stopPropagation()} style={{ maxHeight: '90vh', overflowY: 'auto' }}>
-            <div className="modal-header" style={{ paddingBottom: '16px', borderBottom: '1px solid var(--border)' }}>
+            <div className="modal-header" style={{ paddingBottom: '16px', borderBottom: '1px solid var(--border-color)' }}>
               <div>
                 <span className="category-badge" style={{ marginBottom: '6px', display: 'inline-block' }}>{selectedArticle.category}</span>
                 <h3 className="modal-title" style={{ fontSize: '1.4rem', fontWeight: 800, margin: 0 }}>{selectedArticle.title}</h3>
@@ -192,7 +201,7 @@ export default function ArticlesTab() {
                 </p>
               </div>
               <button className="close-btn" onClick={() => setSelectedArticle(null)}>
-                <X size={22} />
+                <IconlyClose size={22} />
               </button>
             </div>
             
@@ -237,7 +246,7 @@ export default function ArticlesTab() {
               })}
             </div>
             
-            <div style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
               <button className="btn-primary" style={{ width: 'auto' }} onClick={() => setSelectedArticle(null)}>
                 Done Reading
               </button>

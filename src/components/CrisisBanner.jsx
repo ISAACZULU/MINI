@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, Phone, ShieldAlert } from 'lucide-react';
+import { IconlyAlert, IconlyPhone, IconlyShield } from './Iconly';
 import { useApp } from '../context/AppContext';
 
 export default function CrisisBanner() {
@@ -10,7 +10,7 @@ export default function CrisisBanner() {
       <div className="crisis-bar-inner">
         <div className="crisis-left">
           <div className="pulse-alert-icon">
-            <AlertTriangle size={18} />
+            <IconlyAlert size={18} />
           </div>
           <div>
             <span className="crisis-title">Need immediate emergency or crisis support?</span>
@@ -20,11 +20,11 @@ export default function CrisisBanner() {
 
         <div className="crisis-right">
           <a href="tel:18005550199" className="crisis-action-btn primary">
-            <Phone size={14} />
+            <IconlyPhone size={14} />
             <span>Call 1-800-555-0199</span>
           </a>
           <button className="crisis-action-btn secondary" onClick={() => setIsCrisisModalOpen(true)}>
-            <ShieldAlert size={14} />
+            <IconlyShield size={14} />
             <span>View Emergency Resources</span>
           </button>
         </div>

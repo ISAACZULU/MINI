@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { IconlyClose, IconlyShield, IconlyCheckCircle } from './Iconly';
 import { useApp } from '../context/AppContext';
 
 export default function AppointmentModal() {
@@ -20,19 +20,19 @@ export default function AppointmentModal() {
 
   return (
     <div className="modal-overlay" onClick={() => setIsAppointmentModalOpen(false)}>
-      <div className="modal-card" onClick={e => e.stopPropagation()}>
+      <div className="modal-card" onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: '500px' }}>
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <h3 className="modal-title">Book Confidential 1-on-1 Counseling</h3>
           </div>
           <button className="close-btn" onClick={() => setIsAppointmentModalOpen(false)}>
-            <X size={20} />
+            <IconlyClose size={20} />
           </button>
         </div>
 
         <form onSubmit={onSubmit} className="modal-body">
-          <div style={{ background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '12px', borderRadius: '10px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.85rem', color: '#065f46' }}>
-            <ShieldCheck size={18} />
+          <div style={{ background: 'var(--safety-green-light)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '12px', borderRadius: '10px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.85rem', color: 'var(--safety-green-dark)' }}>
+            <IconlyShield size={18} style={{ flexShrink: 0 }} />
             <span>Confidential session protected by FERPA. Student hash: <strong>{sessionHash}</strong></span>
           </div>
 
@@ -45,7 +45,7 @@ export default function AppointmentModal() {
             </select>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
             <div className="form-group">
               <label className="form-label">Preferred Date</label>
               <input type="date" className="form-input" value={date} onChange={e => setDate(e.target.value)} required />
@@ -76,8 +76,9 @@ export default function AppointmentModal() {
             <input type="text" className="form-input" value={topic} onChange={e => setTopic(e.target.value)} placeholder="e.g. Exam panic, sleep issues" required />
           </div>
 
-          <button type="submit" className="btn-primary">
-            <CheckCircle2 size={16} /> Confirm Appointment Booking
+          <button type="submit" className="btn-primary" style={{ width: '100%' }}>
+            <IconlyCheckCircle size={16} />
+            <span>Confirm Appointment Booking</span>
           </button>
         </form>
       </div>

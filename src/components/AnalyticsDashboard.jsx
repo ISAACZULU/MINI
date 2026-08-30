@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { 
-  BarChart3, 
-  TrendingUp, 
-  Download, 
-  Users, 
-  AlertTriangle, 
-  Activity,
-  HeartHandshake,
-  PieChart as PieIcon
-} from 'lucide-react';
+  IconlyActivity, 
+  IconlyTrendingUp, 
+  IconlyDownload, 
+  IconlyUser, 
+  IconlyAlert, 
+  IconlyHandshake, 
+  IconlyPie 
+} from './Iconly';
 import { useApp } from '../context/AppContext';
 
 export default function AnalyticsDashboard() {
@@ -96,8 +95,8 @@ export default function AnalyticsDashboard() {
     const dashOffset = -(accumulatedPercent / 100) * circumference;
     accumulatedPercent += (cat.count / totalPosts) * 100;
     
-    // Premium color palette (Bklit UI style)
-    const colors = ['#0ea5e9', '#10b981', '#f43f5e', '#d97706', '#8b5cf6'];
+    // Premium color palette (Ivory/Slate matching colors)
+    const colors = ['var(--primary-blue)', 'var(--safety-green)', 'var(--restrained-red)', 'var(--alert-yellow)', 'var(--primary-teal)'];
     const color = colors[idx % colors.length];
     
     return {
@@ -137,8 +136,8 @@ export default function AnalyticsDashboard() {
       <div className="counselor-header-card">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
           <div className="counselor-header-title" style={{ margin: 0 }}>
-            <div className="counselor-badge-icon" style={{ backgroundColor: '#e0f2fe', color: '#0284c7' }}>
-              <BarChart3 size={28} />
+            <div className="counselor-badge-icon" style={{ backgroundColor: 'var(--pill-bg)', color: 'var(--primary-blue)' }}>
+              <IconlyActivity size={28} />
             </div>
             <div>
               <h2 className="counselor-title-text">Campus Emotional Health & Trend Analytics</h2>
@@ -147,14 +146,15 @@ export default function AnalyticsDashboard() {
           </div>
 
           <button className="btn-primary" style={{ width: 'auto', padding: '10px 20px', fontSize: '0.85rem' }} onClick={handleExportReport}>
-            <Download size={15} /> Export Executive Report
+            <IconlyDownload size={15} /> 
+            <span>Export Executive Report</span>
           </button>
         </div>
 
         {/* Overview Stats */}
         <div className="counselor-metrics-grid" style={{ marginTop: '20px' }}>
           <div className="metric-box">
-            <Users size={20} color="#0284c7" />
+            <IconlyUser size={20} color="var(--primary-blue)" />
             <div>
               <span className="metric-value">1,420+</span>
               <span className="metric-label">Active Student Sessions</span>
@@ -162,7 +162,7 @@ export default function AnalyticsDashboard() {
           </div>
 
           <div className="metric-box">
-            <Activity size={20} color="#10b981" />
+            <IconlyActivity size={20} color="var(--safety-green)" />
             <div>
               <span className="metric-value">94.2%</span>
               <span className="metric-label">Positive Intervention Rate</span>
@@ -170,7 +170,7 @@ export default function AnalyticsDashboard() {
           </div>
 
           <div className="metric-box">
-            <HeartHandshake size={20} color="#f43f5e" />
+            <IconlyHandshake size={20} color="var(--restrained-red)" />
             <div>
               <span className="metric-value">380+</span>
               <span className="metric-label">Peer Support Actions</span>
@@ -178,7 +178,7 @@ export default function AnalyticsDashboard() {
           </div>
 
           <div className="metric-box">
-            <TrendingUp size={20} color="#d97706" />
+            <IconlyTrendingUp size={20} color="var(--alert-yellow)" />
             <div>
               <span className="metric-value">+18%</span>
               <span className="metric-label">Midterm Week Spike</span>
@@ -194,7 +194,7 @@ export default function AnalyticsDashboard() {
         <div className="triage-section">
           <div className="section-title-bar">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <TrendingUp size={18} color="var(--primary-teal)" />
+              <IconlyTrendingUp size={18} color="var(--primary-teal)" />
               <h3 className="section-heading">7-Day Campus Distress Alert Trend</h3>
             </div>
           </div>
@@ -217,11 +217,6 @@ export default function AnalyticsDashboard() {
                     <stop offset="0%" stopColor="var(--primary-teal)" stopOpacity="0.3" />
                     <stop offset="100%" stopColor="var(--primary-teal)" stopOpacity="0.0" />
                   </linearGradient>
-                  {/* Line Glow Filter */}
-                  <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                  </filter>
                 </defs>
 
                 {/* Grid Lines */}
@@ -239,7 +234,6 @@ export default function AnalyticsDashboard() {
                   stroke="var(--primary-teal)" 
                   strokeWidth="3.5" 
                   strokeLinecap="round"
-                  filter="url(#glow)"
                 />
 
                 {/* Data Points */}
@@ -292,7 +286,7 @@ export default function AnalyticsDashboard() {
                     position: 'absolute',
                     top: `${yCoords[hoveredIdx] - 50}px`,
                     left: `${(xCoords[hoveredIdx] / 500) * 100}%`,
-                    transform: 'translateX(-50%)',
+                    transform: hoveredIdx === 0 ? 'translateX(0%)' : hoveredIdx === xCoords.length - 1 ? 'translateX(-100%)' : 'translateX(-50%)',
                     background: 'var(--card-bg)',
                     border: '1px solid var(--border-color)',
                     borderRadius: '8px',
@@ -324,7 +318,7 @@ export default function AnalyticsDashboard() {
         <div className="appointments-section">
           <div className="section-title-bar">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <PieIcon size={18} color="var(--primary-teal)" />
+              <IconlyPie size={18} color="var(--primary-teal)" />
               <h3 className="section-heading">Category Distribution Share</h3>
             </div>
           </div>
@@ -387,10 +381,10 @@ export default function AnalyticsDashboard() {
             <h3 className="section-heading">AI Triage Administrative Recommendations</h3>
           </div>
 
-          <div className="triage-recommendations-grid">
-            <div className="appointment-card" style={{ borderLeft: '4px solid #e11d48', background: 'var(--card-bg)', padding: '16px', borderRadius: '8px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#e11d48', fontWeight: 700, fontSize: '0.9rem', marginBottom: '4px' }}>
-                <AlertTriangle size={16} />
+          <div className="triage-recommendations-grid" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div className="appointment-card" style={{ borderLeft: '4px solid var(--restrained-red)', background: 'var(--card-bg)', padding: '16px', borderRadius: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--restrained-red)', fontWeight: 700, fontSize: '0.9rem', marginBottom: '4px' }}>
+                <IconlyAlert size={16} />
                 <span>Exam Panic Pre-emptive Outreach</span>
               </div>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
@@ -398,9 +392,9 @@ export default function AnalyticsDashboard() {
               </p>
             </div>
 
-            <div className="appointment-card" style={{ borderLeft: '4px solid #10b981', background: 'var(--card-bg)', padding: '16px', borderRadius: '8px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#10b981', fontWeight: 700, fontSize: '0.9rem', marginBottom: '4px' }}>
-                <TrendingUp size={16} />
+            <div className="appointment-card" style={{ borderLeft: '4px solid var(--safety-green)', background: 'var(--card-bg)', padding: '16px', borderRadius: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--safety-green)', fontWeight: 700, fontSize: '0.9rem', marginBottom: '4px' }}>
+                <IconlyTrendingUp size={16} />
                 <span>Peer Support Engagement Surge</span>
               </div>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>

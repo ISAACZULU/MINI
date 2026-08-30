@@ -70,7 +70,7 @@ export default function LandingGatewayPage() {
     });
     setRole('counselor');
     setHasEnteredGateway(true);
-    showToast('Signed in to Counselor Enterprise Command Center', 'success');
+    showToast('Signed in to Counselor Center', 'success');
   };
 
   const fillDemoStudent = () => {
@@ -249,8 +249,7 @@ export default function LandingGatewayPage() {
               </div>
 
               <button type="submit" className="btn-primary" style={{ padding: '14px 24px', fontSize: '1rem', background: '#1e4d40' }}>
-                <ShieldCheck size={18} />
-                <span>Enter Counselor Command Center</span>
+                <span>Enter Counselor Center</span>
               </button>
             </form>
           )}

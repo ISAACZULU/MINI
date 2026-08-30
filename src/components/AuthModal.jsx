@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
-import { X, UserCheck, ShieldCheck, User, Lock, ArrowRight, CheckCircle2, RefreshCw } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import {
+  IconlyClose,
+  IconlyUser,
+  IconlyShield,
+  IconlyLock,
+  IconlyArrowRight,
+  IconlyCheckCircle,
+  IconlyRefresh
+} from './Iconly';
 
 export default function AuthModal() {
   const { 
@@ -62,61 +70,64 @@ export default function AuthModal() {
     });
     setRole('counselor');
     setIsAuthModalOpen(false);
-    showToast('Signed in to Counselor Enterprise Command Center', 'success');
+    showToast('Signed in to Counselor Center', 'success');
   };
 
   const fillDemoStudent = () => {
     setStudentEmail('jordan.rivera@university.edu');
-    setStudentPassword('••••••••••••');
+    setStudentPassword('password123');
   };
 
   const fillDemoCounselor = () => {
     setCounselorId('LCSW-88492');
-    setCounselorKey('••••••••••••');
+    setCounselorKey('counselorpass');
   };
 
   return (
     <div className="modal-overlay" onClick={() => setIsAuthModalOpen(false)} style={{ zIndex: 950 }}>
-      <div className="modal-card" onClick={e => e.stopPropagation()} style={{ maxWidth: '540px' }}>
+      <div className="modal-card" onClick={e => e.stopPropagation()} style={{ maxWidth: '540px', width: '90%' }}>
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ background: 'var(--primary-teal-light)', color: 'var(--primary-teal)', padding: '6px', borderRadius: '50%', display: 'flex' }}>
-              <UserCheck size={20} />
+              <IconlyUser size={20} />
             </div>
             <div>
-              <h3 className="modal-title" style={{ margin: 0 }}>Campus Access & Authentication Portal</h3>
+              <h3 className="modal-title" style={{ margin: 0, fontSize: '1.15rem' }}>Campus Access Portal</h3>
               <span style={{ fontSize: '0.775rem', color: 'var(--text-muted)' }}>KNUST Single Sign-On (SSO) Portal</span>
             </div>
           </div>
           <button className="close-btn" onClick={() => setIsAuthModalOpen(false)}>
-            <X size={20} />
+            <IconlyClose size={20} />
           </button>
         </div>
 
         <div className="modal-body">
           {/* Auth Access Mode Tabs */}
-          <div className="auth-tab-bar">
+          <div className="auth-tab-bar" style={{ display: 'flex', borderBottom: '1px solid var(--border-color)', marginBottom: '20px' }}>
             <button 
               className={`auth-tab-btn ${activeTab === 'guest' ? 'active' : ''}`}
               onClick={() => setActiveTab('guest')}
+              style={{ flex: 1, padding: '10px', background: 'none', border: 'none', borderBottom: activeTab === 'guest' ? '2px solid var(--primary-teal)' : 'none', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: activeTab === 'guest' ? 'var(--primary-teal)' : 'var(--text-muted)' }}
             >
-              <User size={15} />
-              <span>Anonymous Visitor</span>
+              <IconlyUser size={15} />
+              <span>Visitor</span>
             </button>
 
             <button 
               className={`auth-tab-btn ${activeTab === 'student' ? 'active' : ''}`}
               onClick={() => setActiveTab('student')}
+              style={{ flex: 1, padding: '10px', background: 'none', border: 'none', borderBottom: activeTab === 'student' ? '2px solid var(--primary-teal)' : 'none', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: activeTab === 'student' ? 'var(--primary-teal)' : 'var(--text-muted)' }}
             >
-              <Lock size={15} />
+              <IconlyLock size={15} />
               <span>Student SSO</span>
             </button>
 
             <button 
               className={`auth-tab-btn ${activeTab === 'counselor' ? 'active' : ''}`}
               onClick={() => setActiveTab('counselor')}
+              style={{ flex: 1, padding: '10px', background: 'none', border: 'none', borderBottom: activeTab === 'counselor' ? '2px solid var(--primary-teal)' : 'none', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: activeTab === 'counselor' ? 'var(--primary-teal)' : 'var(--text-muted)' }}
             >
-              <ShieldCheck size={15} />
+              <IconlyShield size={15} />
               <span>Counselor</span>
             </button>
           </div>
@@ -124,8 +135,8 @@ export default function AuthModal() {
           {/* Tab 1: Anonymous Visitor / Guest */}
           {activeTab === 'guest' && (
             <div>
-              <div className="privacy-banner" style={{ background: '#ecfdf5', borderColor: '#a7f3d0', color: '#065f46', marginBottom: '18px' }}>
-                <CheckCircle2 size={18} style={{ flexShrink: 0 }} />
+              <div className="privacy-banner" style={{ background: 'var(--safety-green-light)', borderColor: 'rgba(16, 185, 129, 0.2)', color: 'var(--safety-green-dark)', marginBottom: '18px', padding: '12px', border: '1px solid', borderRadius: '8px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <IconlyCheckCircle size={18} style={{ flexShrink: 0 }} />
                 <span>Zero registration required. Your privacy is cryptographically protected under FERPA guidelines.</span>
               </div>
 
@@ -133,15 +144,15 @@ export default function AuthModal() {
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Assigned Anonymous Session Token:</span>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                   <code style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--primary-teal)', fontFamily: 'monospace' }}>{sessionHash}</code>
-                  <button onClick={rotateSessionHash} title="Rotate hash" style={{ color: 'var(--text-muted)' }}>
-                    <RefreshCw size={15} />
+                  <button onClick={rotateSessionHash} title="Rotate hash" style={{ color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }}>
+                    <IconlyRefresh size={15} />
                   </button>
                 </div>
               </div>
 
-              <button className="btn-primary" onClick={handleGuestLogin}>
-                <span>Enter Haven KNUST as Anonymous Visitor</span>
-                <ArrowRight size={16} />
+              <button className="btn-anon-guest" onClick={handleGuestLogin} style={{ width: '100%' }}>
+                <span>Enter as Anonymous Visitor</span>
+                <IconlyArrowRight size={16} />
               </button>
             </div>
           )}
@@ -149,9 +160,9 @@ export default function AuthModal() {
           {/* Tab 2: Student SSO */}
           {activeTab === 'student' && (
             <form onSubmit={handleStudentSSO}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
                 <span style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>Sign in with your official university credentials</span>
-                <button type="button" onClick={fillDemoStudent} style={{ fontSize: '0.75rem', color: 'var(--primary-teal)', fontWeight: 700 }}>
+                <button type="button" onClick={fillDemoStudent} style={{ fontSize: '0.75rem', color: 'var(--primary-teal)', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer' }}>
                   + Fill Demo Student
                 </button>
               </div>
@@ -164,6 +175,7 @@ export default function AuthModal() {
                   placeholder="jordan.rivera@university.edu" 
                   value={studentEmail}
                   onChange={e => setStudentEmail(e.target.value)}
+                  style={{ width: '100%' }}
                   required 
                 />
               </div>
@@ -176,13 +188,14 @@ export default function AuthModal() {
                   placeholder="••••••••••••" 
                   value={studentPassword}
                   onChange={e => setStudentPassword(e.target.value)}
+                  style={{ width: '100%' }}
                   required 
                 />
               </div>
 
-              <button type="submit" className="btn-primary">
+              <button type="submit" className="btn-primary" style={{ width: '100%' }}>
                 <span>Sign In via Campus SSO</span>
-                <ArrowRight size={16} />
+                <IconlyArrowRight size={16} />
               </button>
             </form>
           )}
@@ -190,9 +203,9 @@ export default function AuthModal() {
           {/* Tab 3: Counselor Portal */}
           {activeTab === 'counselor' && (
             <form onSubmit={handleCounselorLogin}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
                 <span style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>Campus Mental Health Professional Portal</span>
-                <button type="button" onClick={fillDemoCounselor} style={{ fontSize: '0.75rem', color: 'var(--primary-teal)', fontWeight: 700 }}>
+                <button type="button" onClick={fillDemoCounselor} style={{ fontSize: '0.75rem', color: 'var(--primary-teal)', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer' }}>
                   + Fill Demo Counselor
                 </button>
               </div>
@@ -205,6 +218,7 @@ export default function AuthModal() {
                   placeholder="e.g. LCSW-88492" 
                   value={counselorId}
                   onChange={e => setCounselorId(e.target.value)}
+                  style={{ width: '100%' }}
                   required 
                 />
               </div>
@@ -217,13 +231,13 @@ export default function AuthModal() {
                   placeholder="••••••••••••" 
                   value={counselorKey}
                   onChange={e => setCounselorKey(e.target.value)}
+                  style={{ width: '100%' }}
                   required 
                 />
               </div>
 
-              <button type="submit" className="btn-primary" style={{ background: 'var(--primary-teal)' }}>
-                <ShieldCheck size={16} />
-                <span>Enter Counselor Command Center</span>
+              <button type="submit" className="btn-primary" style={{ width: '100%' }}>
+                <span>Enter Counselor Center</span>
               </button>
             </form>
           )}

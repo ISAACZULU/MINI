@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { 
-  ShieldCheck, 
-  AlertTriangle, 
-  Clock, 
-  Calendar, 
-  Video, 
-  CheckCircle, 
-  AlertCircle
-} from 'lucide-react';
+  IconlyShield, 
+  IconlyAlert, 
+  IconlyClock, 
+  IconlyCalendar, 
+  IconlyVideo, 
+  IconlyCheckCircle 
+} from './Iconly';
 import { useApp } from '../context/AppContext';
 import { RISK_CONFIG } from '../types';
 
@@ -24,24 +23,31 @@ export default function CounselorDashboard() {
   });
 
   const filteredPosts = sortedPosts.filter(p => {
+    // If another counselor already responded, that thread shouldn't show in the current counselor's feed.
+    const hasCounselorReplied = p.replies && p.replies.some(r => r.isCounselor);
+    if (hasCounselorReplied) return false;
+
     if (triageFilter === 'ALL') return true;
     return p.riskAnalysis?.riskLevel === triageFilter;
   });
 
-  const crisisCount = posts.filter(p => p.riskAnalysis?.riskLevel === 'CRISIS').length;
-  const highRiskCount = posts.filter(p => p.riskAnalysis?.riskLevel === 'HIGH').length;
+  // Count active (unanswered) items for accurate header counters
+  const activePosts = posts.filter(p => {
+    const hasCounselorReplied = p.replies && p.replies.some(r => r.isCounselor);
+    return !hasCounselorReplied;
+  });
+
+  const crisisCount = activePosts.filter(p => p.riskAnalysis?.riskLevel === 'CRISIS').length;
+  const highRiskCount = activePosts.filter(p => p.riskAnalysis?.riskLevel === 'HIGH').length;
 
   return (
     <div className="counselor-dashboard-container">
       {/* Dashboard Top Header & Stats Cards */}
       <div className="counselor-header-card">
         <div className="counselor-header-title">
-          <div className="counselor-badge-icon">
-            <ShieldCheck size={28} />
-          </div>
           <div>
-            <h2 className="counselor-title-text">Counselor Enterprise Command Center</h2>
-            <p className="counselor-subtitle-text">Verified Mental Health Practitioner Portal • Real-Time AI Risk Triage Engine</p>
+            <h2 className="counselor-title-text">Counselor Center</h2>
+            <p className="counselor-subtitle-text">Verified Counselor Portal</p>
           </div>
         </div>
 
@@ -49,7 +55,7 @@ export default function CounselorDashboard() {
         <div className="counselor-metrics-grid">
           <div className="metric-box metric-crisis">
             <div className="metric-icon">
-              <AlertTriangle size={20} />
+              <IconlyAlert size={20} />
             </div>
             <div>
               <span className="metric-value">{crisisCount}</span>
@@ -59,7 +65,7 @@ export default function CounselorDashboard() {
 
           <div className="metric-box metric-high">
             <div className="metric-icon">
-              <AlertCircle size={20} />
+              <IconlyAlert size={20} />
             </div>
             <div>
               <span className="metric-value">{highRiskCount}</span>
@@ -69,7 +75,7 @@ export default function CounselorDashboard() {
 
           <div className="metric-box metric-appointments">
             <div className="metric-icon">
-              <Calendar size={20} />
+              <IconlyCalendar size={20} />
             </div>
             <div>
               <span className="metric-value">{appointments.length}</span>
@@ -79,7 +85,7 @@ export default function CounselorDashboard() {
 
           <div className="metric-box metric-speed">
             <div className="metric-icon">
-              <Clock size={20} />
+              <IconlyClock size={20} />
             </div>
             <div>
               <span className="metric-value">14m</span>
@@ -99,7 +105,7 @@ export default function CounselorDashboard() {
             </div>
 
             {/* Filter buttons */}
-            <div className="triage-filter-group">
+            <div className="triage-filter-group" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               <button 
                 className={`filter-btn ${triageFilter === 'ALL' ? 'active' : ''}`}
                 onClick={() => setTriageFilter('ALL')}
@@ -131,8 +137,8 @@ export default function CounselorDashboard() {
                   <div key={post.id} className="triage-item-card">
                     <div className="triage-card-top">
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span className={`risk-badge ${riskMeta.badgeClass}`}>
-                          {post.riskAnalysis?.isCrisis ? <AlertTriangle size={13} /> : <AlertCircle size={13} />}
+                        <span className={`risk-badge ${riskMeta.badgeClass}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <IconlyAlert size={13} />
                           {riskMeta.label}
                         </span>
                         <span className="category-badge" style={{ margin: 0 }}>{post.tag}</span>
@@ -157,14 +163,14 @@ export default function CounselorDashboard() {
                         Posted by {post.author} • {post.timeAgo}
                       </span>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                         {hasCounselorReplied ? (
-                          <span className="counselor-status-done">
-                            <CheckCircle size={13} /> Counselor Responded
+                          <span className="counselor-status-done" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                            <IconlyCheckCircle size={13} /> Counselor Responded
                           </span>
                         ) : (
                           <span className="counselor-status-pending">
-                            Pending Outreach
+                            Pending Triage
                           </span>
                         )}
 
@@ -173,7 +179,7 @@ export default function CounselorDashboard() {
                           style={{ width: 'auto', padding: '6px 14px', fontSize: '0.85rem' }}
                           onClick={() => setActiveReplyPost(post)}
                         >
-                          Respond as Counselor
+                          Respond
                         </button>
                       </div>
                     </div>
@@ -181,8 +187,8 @@ export default function CounselorDashboard() {
                 );
               })
             ) : (
-              <div style={{ textAlign: 'center', padding: '40px', background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                <CheckCircle size={36} color="#10b981" style={{ marginBottom: '8px' }} />
+              <div style={{ textAlign: 'center', padding: '40px', background: 'var(--card-bg)', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+                <IconlyCheckCircle size={36} color="var(--safety-green)" style={{ marginBottom: '8px' }} />
                 <h4>No threads under selected filter</h4>
               </div>
             )}
@@ -207,8 +213,8 @@ export default function CounselorDashboard() {
               appointments.map(appt => (
                 <div key={appt.id} className="appointment-card">
                   <div className="appointment-header">
-                    <span className="appt-mode-badge">
-                      <Video size={13} />
+                    <span className="appt-mode-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <IconlyVideo size={13} />
                       {appt.mode}
                     </span>
                     <span className="appt-status-badge">{appt.status}</span>
@@ -236,13 +242,13 @@ export default function CounselorDashboard() {
                     onClick={() => setActiveTelehealthRoom(appt)}
                     className="launch-telehealth-btn"
                   >
-                    <Video size={14} />
+                    <IconlyVideo size={14} />
                     <span>Launch Live Telehealth Meeting</span>
                   </button>
                 </div>
               ))
             ) : (
-              <p style={{ fontStyle: 'italic', color: '#94a3b8', fontSize: '0.9rem' }}>No upcoming appointment sessions booked.</p>
+              <p style={{ fontStyle: 'italic', color: 'var(--text-subtle)', fontSize: '0.9rem' }}>No upcoming appointment sessions booked.</p>
             )}
           </div>
         </div>

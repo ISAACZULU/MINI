@@ -295,8 +295,18 @@ export function AppProvider({ children }) {
   };
 
   const logout = () => {
+    localStorage.setItem('ms_is_authenticated', 'false');
+    localStorage.removeItem('ms_user_auth');
+    localStorage.removeItem('ms_role');
     setIsAuthenticated(false);
-    showToast('Logged out. Returning to Sign In portal.', 'info');
+    setRole('student');
+    setUserAuth({
+      isGuest: true,
+      userType: 'student',
+      displayName: 'Anon#4821',
+      email: 'visitor@campus.edu'
+    });
+    showToast('Logged out. Returning to landing page.', 'info');
   };
 
   useEffect(() => {
