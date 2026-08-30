@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Lock, Send, CheckCircle, AlertTriangle } from 'lucide-react';
+import { IconlyClose, IconlyLock, IconlySend, IconlyCheckCircle, IconlyAlert } from './Iconly';
 import { useApp } from '../context/AppContext';
 import { CATEGORIES, RISK_CONFIG } from '../types';
 import { analyzeTextRisk } from '../utils/riskAnalyzer';
@@ -31,20 +31,20 @@ export default function CreatePostModal() {
 
   return (
     <div className="modal-overlay" onClick={() => setIsCreateModalOpen(false)}>
-      <div className="modal-card" onClick={e => e.stopPropagation()}>
+      <div className="modal-card" onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: '500px' }}>
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <h3 className="modal-title">Share Anonymously</h3>
             <span className="anon-hash-badge">{sessionHash}</span>
           </div>
           <button className="close-btn" onClick={() => setIsCreateModalOpen(false)}>
-            <X size={20} />
+            <IconlyClose size={20} />
           </button>
         </div>
 
         <form onSubmit={onSubmit} className="modal-body">
-          <div className="privacy-banner">
-            <Lock size={16} />
+          <div className="privacy-banner" style={{ background: 'var(--pill-bg)', border: '1px solid var(--border-color)', padding: '12px', borderRadius: '8px', color: 'var(--text-main)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+            <IconlyLock size={16} style={{ flexShrink: 0 }} />
             <span>Identity protected via SHA-256 session hash rotation. No student ID or IP is logged.</span>
           </div>
 
@@ -54,6 +54,7 @@ export default function CreatePostModal() {
               className="form-select"
               value={tag} 
               onChange={e => setTag(e.target.value)}
+              style={{ width: '100%' }}
             >
               {CATEGORIES.filter(c => c !== 'All').map(cat => (
                 <option key={cat} value={cat}>{cat}</option>
@@ -69,6 +70,7 @@ export default function CreatePostModal() {
               placeholder="What's on your mind?"
               value={title}
               onChange={e => setTitle(e.target.value)}
+              style={{ width: '100%' }}
               required
             />
           </div>
@@ -80,6 +82,7 @@ export default function CreatePostModal() {
               placeholder="Express your thoughts freely..."
               value={content}
               onChange={e => setContent(e.target.value)}
+              style={{ width: '100%', minHeight: '120px' }}
               required
             />
           </div>
@@ -101,7 +104,7 @@ export default function CreatePostModal() {
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
                 <span style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  {liveRisk.isCrisis ? <AlertTriangle size={15} /> : <CheckCircle size={15} />}
+                  {liveRisk.isCrisis ? <IconlyAlert size={15} /> : <IconlyCheckCircle size={15} />}
                   AI Safety Analysis: {riskMeta.label}
                 </span>
                 <span style={{ fontWeight: 600 }}>Score: {liveRisk.score}/100</span>
@@ -110,8 +113,9 @@ export default function CreatePostModal() {
             </div>
           )}
 
-          <button type="submit" className="btn-primary">
-            <Send size={16} /> Post Anonymously
+          <button type="submit" className="btn-primary" style={{ width: '100%' }}>
+            <IconlySend size={16} />
+            <span>Post Anonymously</span>
           </button>
         </form>
       </div>

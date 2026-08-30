@@ -1,12 +1,12 @@
 import React from 'react';
-import { Shield, Heart, Sparkles, Coffee } from 'lucide-react';
+import { IconlyShield, IconlyHeart, IconlyStar, IconlyCoffee } from './Iconly';
 import { useApp } from '../context/AppContext';
 
 export const EMPATHY_BADGES = [
-  { id: 'resilient', Icon: Shield, label: 'Resilient', animClass: 'animate-icon-lock' },
-  { id: 'hug', Icon: Heart, label: 'Warm Hug', animClass: 'animate-icon-heart' },
-  { id: 'star', Icon: Sparkles, label: "You've Got This", animClass: 'animate-icon-star' },
-  { id: 'coffee', Icon: Coffee, label: 'Take a Rest', animClass: 'animate-icon-user' }
+  { id: 'resilient', Icon: IconlyShield, label: 'Resilient', animClass: 'animate-icon-lock' },
+  { id: 'hug', Icon: IconlyHeart, label: 'Warm Hug', animClass: 'animate-icon-heart' },
+  { id: 'star', Icon: IconlyStar, label: "You've Got This", animClass: 'animate-icon-star' },
+  { id: 'coffee', Icon: IconlyCoffee, label: 'Take a Rest', animClass: 'animate-icon-user' }
 ];
 
 export default function EmpathyBadges({ postId, reactions = {} }) {

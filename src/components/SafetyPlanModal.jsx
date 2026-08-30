@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { X, Shield, Phone, Heart, Home, Save, Printer, Lock } from 'lucide-react';
+import { 
+  IconlyClose, 
+  IconlyShield, 
+  IconlyPhone, 
+  IconlyHeart, 
+  IconlyHome, 
+  IconlySave, 
+  IconlyPrinter, 
+  IconlyLock 
+} from './Iconly';
 import { useApp } from '../context/AppContext';
 
 export default function SafetyPlanModal() {
@@ -36,38 +45,41 @@ export default function SafetyPlanModal() {
 
   return (
     <div className="modal-overlay" onClick={() => setIsSafetyPlanModalOpen(false)}>
-      <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
+      <div className="modal-card modal-large" onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: '650px' }}>
         <div className="modal-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#10b981' }}>
-            <Shield size={20} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--safety-green)' }}>
+            <IconlyShield size={20} />
             <h3 className="modal-title" style={{ color: 'inherit' }}>Personal Emergency Safety Net Plan</h3>
           </div>
           <button className="close-btn" onClick={() => setIsSafetyPlanModalOpen(false)}>
-            <X size={20} />
+            <IconlyClose size={20} />
           </button>
         </div>
 
         <form onSubmit={onSubmit} className="modal-body">
-          <div style={{ background: '#ecfdf5', border: '1px solid #a7f3d0', padding: '12px', borderRadius: '10px', marginBottom: '18px', fontSize: '0.85rem', color: '#065f46', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ background: 'var(--safety-green-light)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '12px', borderRadius: '10px', marginBottom: '18px', fontSize: '0.85rem', color: 'var(--safety-green-dark)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span className="animate-icon-lock"><Lock size={13} /></span>
+              <span className="animate-icon-lock"><IconlyLock size={13} /></span>
               <span>Confidential personal safety plan bound to Session Hash: <strong>{sessionHash}</strong></span>
             </span>
-            <button type="button" onClick={handlePrintPlan} style={{ background: '#ffffff', color: '#065f46', border: '1px solid #a7f3d0', padding: '4px 10px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Printer size={13} /> Print Safety Card
+            <button type="button" onClick={handlePrintPlan} style={{ background: '#ffffff', color: 'var(--safety-green-dark)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '6px 12px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}>
+              <IconlyPrinter size={13} /> 
+              <span>Print Safety Card</span>
             </button>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '16px' }}>
             <div className="form-group">
               <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Phone size={15} color="#0284c7" /> 1. Trusted Support Contact
+                <IconlyPhone size={15} color="var(--primary-blue)" /> 
+                <span>1. Trusted Support Contact</span>
               </label>
               <input 
                 type="text" 
                 className="form-input" 
                 value={trustedContact} 
                 onChange={e => setTrustedContact(e.target.value)} 
+                style={{ width: '100%' }}
                 placeholder="e.g. Roommate Sarah or Campus Counselor" 
                 required 
               />
@@ -75,29 +87,33 @@ export default function SafetyPlanModal() {
 
             <div className="form-group">
               <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Heart size={15} color="#e11d48" /> 2. Key Coping Technique
+                <IconlyHeart size={15} color="var(--restrained-red)" /> 
+                <span>2. Key Coping Technique</span>
               </label>
               <input 
                 type="text" 
                 className="form-input" 
                 value={copingStrategy} 
                 onChange={e => setCopingStrategy(e.target.value)} 
+                style={{ width: '100%' }}
                 placeholder="e.g. 4-7-8 Breathing or Listening to Music" 
                 required 
               />
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '20px' }}>
             <div className="form-group">
               <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Home size={15} color="#d97706" /> 3. Safe Physical Environment
+                <IconlyHome size={15} color="var(--alert-yellow)" /> 
+                <span>3. Safe Physical Environment</span>
               </label>
               <input 
                 type="text" 
                 className="form-input" 
                 value={safePlace} 
                 onChange={e => setSafePlace(e.target.value)} 
+                style={{ width: '100%' }}
                 placeholder="e.g. Campus Wellness Lounge Room 104" 
                 required 
               />
@@ -105,21 +121,24 @@ export default function SafetyPlanModal() {
 
             <div className="form-group">
               <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Shield size={15} color="#10b981" /> 4. Personal Affirmation
+                <IconlyShield size={15} color="var(--safety-green)" /> 
+                <span>4. Personal Affirmation</span>
               </label>
               <input 
                 type="text" 
                 className="form-input" 
                 value={affirmation} 
                 onChange={e => setAffirmation(e.target.value)} 
+                style={{ width: '100%' }}
                 placeholder="e.g. I am safe and this panic will pass." 
                 required 
               />
             </div>
           </div>
 
-          <button type="submit" className="btn-primary">
-            <Save size={15} /> Save Personal Safety Net Card
+          <button type="submit" className="btn-primary" style={{ width: '100%' }}>
+            <IconlySave size={15} /> 
+            <span>Save Personal Safety Net Card</span>
           </button>
         </form>
       </div>

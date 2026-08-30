@@ -1,25 +1,59 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Sparkles, 
-  X, 
-  Send, 
-  Mic, 
-  MicOff, 
-  Volume2, 
-  VolumeX, 
-  ShieldCheck, 
-  Bot,
-  Volume1,
-  Key,
-  ExternalLink,
-  Square,
-  BrainCircuit,
-  FileText,
-  AlertTriangle,
-  Heart
-} from 'lucide-react';
 import { generateMentalHealthAIResponse } from '../services/aiService';
 import { useApp } from '../context/AppContext';
+import {
+  IconlyStar,
+  IconlyClose,
+  IconlySend,
+  IconlyShield,
+  IconlyLock,
+  IconlyRefresh,
+  IconlyBot,
+  IconlyActivity,
+  IconlyDocument,
+  IconlyAlert
+} from './Iconly';
+
+// Custom Mic SVGs for voice assistant
+function IconlyMic({ size = 16, ...props }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+      <line x1="12" y1="19" x2="12" y2="22" />
+    </svg>
+  );
+}
+
+function IconlyMicOff({ size = 16, ...props }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <line x1="1" y1="1" x2="23" y2="23" />
+      <path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V5a3 3 0 0 0-5.94-.6" />
+      <path d="M17 11.5a7 7 0 0 1-10.74 5.76M2 10v2a10 10 0 0 0 16.5 7.5" />
+      <line x1="12" y1="19" x2="12" y2="22" />
+    </svg>
+  );
+}
+
+function IconlyVolumeUp({ size = 17, ...props }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+    </svg>
+  );
+}
+
+function IconlyVolumeMute({ size = 17, ...props }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+      <line x1="23" y1="9" x2="17" y2="15" />
+      <line x1="17" y1="9" x2="23" y2="15" />
+    </svg>
+  );
+}
 
 const DEFAULT_GEMINI_KEY = "AIzaSyDAN1uQY8mV5nf-BPf4zibpuaFRx8C_IFg";
 
@@ -295,7 +329,7 @@ export default function FloatingAIAssistant() {
           title="Open Gemini AI Assistant Portal"
         >
           <div className="fab-ai-icon-box">
-            <Sparkles size={22} color="#ffffff" />
+            <IconlyStar size={22} color="#ffffff" />
           </div>
           <span className="fab-ai-label">Gemini AI</span>
         </button>
@@ -307,8 +341,8 @@ export default function FloatingAIAssistant() {
           {/* Header */}
           <div className="ai-drawer-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div className="ai-avatar-badge" style={{ background: 'linear-gradient(135deg, #2563eb, #7c3aed)' }}>
-                <Sparkles size={20} color="#ffffff" />
+              <div className="ai-avatar-badge" style={{ background: 'var(--primary-teal)' }}>
+                <IconlyStar size={20} color="#ffffff" />
               </div>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -320,12 +354,12 @@ export default function FloatingAIAssistant() {
                       className="speaking-soft-badge speaking-active-btn" 
                       title="Click to stop voice reading"
                     >
-                      <Volume1 size={12} className="pulse-icon" /> Stop Reading
+                      Stop Reading
                     </button>
                   )}
                 </div>
-                <span style={{ fontSize: '0.75rem', color: '#059669', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <ShieldCheck size={13} /> Gemini 1.5 Flash Active
+                <span style={{ fontSize: '0.75rem', color: 'var(--safety-green)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <IconlyShield size={13} /> Gemini 1.5 Flash Active
                 </span>
               </div>
             </div>
@@ -337,11 +371,12 @@ export default function FloatingAIAssistant() {
                 className="icon-action-btn"
                 onClick={() => setShowKeyManager(!showKeyManager)}
                 title="Manage Gemini API Key"
-                style={{ color: '#2563eb' }}
+                aria-label="Manage Gemini API Key"
+                style={{ color: 'var(--primary-blue)' }}
               >
-                <Key size={17} />
+                <IconlyLock size={17} />
               </button>
-
+ 
               {/* Voice Read-Aloud Toggle */}
               <button 
                 type="button" 
@@ -355,41 +390,42 @@ export default function FloatingAIAssistant() {
                   }
                 }}
                 title={isSpeaking ? 'Stop Active Speech Readout' : (voiceEnabled ? 'Mute AI Voice' : 'Enable Soft AI Voice')}
+                aria-label={isSpeaking ? 'Stop Active Speech Readout' : (voiceEnabled ? 'Mute AI Voice' : 'Enable Soft AI Voice')}
               >
                 {isSpeaking ? (
-                  <Square size={15} color="#e11d48" fill="#e11d48" />
+                  <span style={{ width: '10px', height: '10px', background: 'var(--restrained-red)', display: 'block', borderRadius: '2px' }} />
                 ) : voiceEnabled ? (
-                  <Volume2 size={17} color="#059669" />
+                  <IconlyVolumeUp size={17} color="var(--safety-green)" />
                 ) : (
-                  <VolumeX size={17} color="#94a3b8" />
+                  <IconlyVolumeMute size={17} color="var(--text-subtle)" />
                 )}
               </button>
-
-              <button type="button" className="icon-action-btn" onClick={handleCloseDrawer}>
-                <X size={18} />
+ 
+              <button type="button" className="icon-action-btn" onClick={handleCloseDrawer} aria-label="Close AI chat companion">
+                <IconlyClose size={18} />
               </button>
             </div>
           </div>
-
+ 
           {/* Gemini API Key Configuration Panel */}
           {showKeyManager && (
-            <div style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0', padding: '14px 16px' }}>
+            <div style={{ background: 'var(--pill-bg)', borderBottom: '1px solid var(--border-color)', padding: '14px 16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#1e293b', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Key size={15} color="#2563eb" />
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <IconlyLock size={15} color="var(--primary-blue)" />
                   Google Gemini API Key Portal
                 </span>
                 <a 
                   href="https://aistudio.google.com/app/apikey" 
                   target="_blank" 
                   rel="noreferrer"
-                  style={{ fontSize: '0.75rem', color: '#2563eb', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '3px', textDecoration: 'none' }}
+                  style={{ fontSize: '0.75rem', color: 'var(--primary-blue)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '3px', textDecoration: 'none' }}
                 >
-                  Get Key <ExternalLink size={12} />
+                  Get Key
                 </a>
               </div>
-              <p style={{ fontSize: '0.775rem', color: '#64748b', margin: '0 0 10px 0', lineHeight: 1.4 }}>
-                Active Key: <code style={{ color: '#059669', fontWeight: 700 }}>AIzaSyDAN...FRx8C_IFg</code>
+              <p style={{ fontSize: '0.775rem', color: 'var(--text-muted)', margin: '0 0 10px 0', lineHeight: 1.4 }}>
+                Active Key: <code style={{ color: 'var(--safety-green)', fontWeight: 700 }}>AIzaSyDAN...FRx8C_IFg</code>
               </p>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <input 
@@ -398,91 +434,92 @@ export default function FloatingAIAssistant() {
                   placeholder="Paste custom key"
                   value={keyInput}
                   onChange={e => setKeyInput(e.target.value)}
+                  aria-label="Custom Gemini API Key Input"
                   style={{ padding: '8px 12px', fontSize: '0.825rem' }}
                 />
                 <button 
                   type="button" 
                   className="btn-primary" 
                   onClick={() => handleSaveGeminiKey(keyInput)}
-                  style={{ width: 'auto', padding: '8px 16px', fontSize: '0.825rem', whiteSpace: 'nowrap' }}
+                  style={{ width: 'auto', padding: '8px 16px', fontSize: '0.825rem', whiteSpace: 'nowrap', height: 'auto' }}
                 >
                   Update Key
                 </button>
               </div>
             </div>
           )}
-
+ 
           {/* Quick Suggestion Pills */}
           <div className="ai-suggestion-pills">
             <button type="button" className="ai-chip" onClick={() => handleChipClick('Explain quantum physics in simple terms')} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-              <span className="animate-icon-star"><BrainCircuit size={14} /></span>
+              <IconlyActivity size={14} />
               <span>Quantum Physics</span>
             </button>
             <button type="button" className="ai-chip" onClick={() => handleChipClick('Write a Python function to sort an array')} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-              <span className="animate-icon-settings"><FileText size={14} /></span>
+              <IconlyDocument size={14} />
               <span>Python Code</span>
             </button>
             <button type="button" className="ai-chip" onClick={() => handleChipClick('How can I overcome severe exam stress?')} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-              <span className="animate-icon-alert"><AlertTriangle size={14} /></span>
+              <IconlyAlert size={14} />
               <span>Exam Stress</span>
             </button>
             <button type="button" className="ai-chip" onClick={() => handleChipClick('Show me a breathing exercise')} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-              <span className="animate-icon-heart"><Heart size={14} /></span>
+              <IconlyStar size={14} />
               <span>Breathing Tool</span>
             </button>
           </div>
-
+ 
           {/* Messages Body */}
-          <div className="ai-drawer-body">
+          <div className="ai-drawer-body" role="log" aria-live="polite" aria-relevant="additions">
             {messages.map(msg => (
               <div 
                 key={msg.id} 
                 className={`ai-message-bubble ${msg.sender === 'user' ? 'user-msg' : 'ai-msg'}`}
               >
                 {msg.sender === 'ai' && (
-                  <div className="msg-avatar" style={{ background: 'linear-gradient(135deg, #2563eb, #7c3aed)' }}>
-                    <Bot size={14} color="#ffffff" />
+                  <div className="msg-avatar" style={{ background: 'var(--primary-teal)' }}>
+                    <IconlyBot size={14} color="#ffffff" />
                   </div>
                 )}
                 <div className="msg-text">{msg.text}</div>
               </div>
             ))}
-
+ 
             {isTyping && (
               <div className="ai-message-bubble ai-msg">
-                <div className="msg-avatar" style={{ background: 'linear-gradient(135deg, #2563eb, #7c3aed)' }}>
-                  <Bot size={14} color="#ffffff" />
+                <div className="msg-avatar" style={{ background: 'var(--primary-teal)' }}>
+                  <IconlyBot size={14} color="#ffffff" />
                 </div>
                 <div className="msg-text typing-dots">
                   <span>●</span> <span>●</span> <span>●</span>
                 </div>
               </div>
             )}
-
+ 
             <div ref={chatEndRef} />
           </div>
-
+ 
           {/* Active Speech Readout Cancellation Bar */}
           {isSpeaking && (
-            <div className="speech-stop-banner" onClick={stopSpeech} title="Click to stop voice readout">
+            <div className="speech-stop-banner" onClick={stopSpeech} title="Click to stop voice readout" style={{ background: 'var(--primary-teal)', color: '#ffffff', padding: '8px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', fontSize: '0.8rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Volume2 size={16} className="pulse-icon" />
+                <IconlyVolumeUp size={16} />
                 <span>Reading response out loud...</span>
               </div>
-              <button type="button" className="stop-reading-btn">
-                <Square size={11} fill="currentColor" /> Stop Reading
+              <button type="button" className="stop-reading-btn" style={{ background: '#ffffff', color: 'var(--primary-teal)', border: 'none', borderRadius: '4px', padding: '4px 8px', fontSize: '0.75rem', fontWeight: 'bold' }} aria-label="Stop active voice playback">
+                Stop Reading
               </button>
             </div>
           )}
-
+ 
           {/* Live Hearing Transcript Banner when mic is listening */}
           {isListening && (
-            <div className="live-hearing-banner" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span className="live-mic-pulse animate-icon-heart" style={{ display: 'flex', alignItems: 'center' }}><Mic size={14} /></span>
+            <div className="live-hearing-banner" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', background: 'var(--pill-bg)', borderBottom: '1px solid var(--border-color)', fontSize: '0.8rem' }}>
+              <span className="live-mic-pulse" style={{ display: 'flex', alignItems: 'center', color: 'var(--restrained-red)' }}><IconlyMic size={14} /></span>
               <span>{interimText || 'Listening... Speak into your microphone now'}</span>
             </div>
           )}
-
+ 
           {/* Input Footer */}
           <form 
             onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} 
@@ -493,20 +530,24 @@ export default function FloatingAIAssistant() {
               className={`mic-btn ${isListening ? 'listening' : ''}`}
               onClick={toggleListening}
               title="Click to speak using Microphone"
+              aria-label={isListening ? "Stop voice listening" : "Start voice listening"}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >
-              {isListening ? <MicOff size={16} color="#e11d48" /> : <Mic size={16} color="#64748b" />}
+              {isListening ? <IconlyMicOff size={16} color="var(--restrained-red)" /> : <IconlyMic size={16} color="var(--text-subtle)" />}
             </button>
-
+ 
             <input 
               type="text" 
               className="ai-input" 
-              placeholder="Ask Gemini anything (coding, science, advice...)"
+              placeholder="Ask Gemini anything..."
               value={inputText}
               onChange={e => setInputText(e.target.value)}
+              aria-label="Message for AI companion"
+              style={{ flexGrow: 1, border: 'none', outline: 'none', background: 'none', fontSize: '0.9rem', color: 'var(--text-main)', padding: '0 8px' }}
             />
-
-            <button type="submit" className="ai-send-btn" disabled={!inputText.trim() || isTyping}>
-              <Send size={15} />
+ 
+            <button type="submit" className="ai-send-btn" disabled={!inputText.trim() || isTyping} aria-label="Send message" style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <IconlySend size={15} color={inputText.trim() && !isTyping ? 'var(--primary-teal)' : 'var(--text-subtle)'} />
             </button>
           </form>
         </div>

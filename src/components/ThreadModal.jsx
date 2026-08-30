@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Heart, ShieldCheck, Sparkles, Send } from 'lucide-react';
+import { IconlyClose, IconlyHeart, IconlyShield, IconlyStar, IconlySend } from './Iconly';
 import { useApp } from '../context/AppContext';
 import { CANNED_COUNSELOR_RESPONSES, RISK_CONFIG } from '../types';
 
@@ -31,11 +31,11 @@ export default function ThreadModal() {
 
   return (
     <div className="modal-overlay" onClick={() => setActiveReplyPost(null)}>
-      <div className="modal-card modal-large" onClick={e => e.stopPropagation()}>
+      <div className="modal-card modal-large" onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: '650px' }}>
         <div className="modal-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <span className="category-badge">
-              <Sparkles size={13} />
+              <IconlyStar size={13} />
               {activeReplyPost.tag}
             </span>
             <span 
@@ -44,10 +44,10 @@ export default function ThreadModal() {
             >
               {riskMeta.label}
             </span>
-            <span style={{ fontSize: '0.85rem', color: '#64748b' }}>by {activeReplyPost.author}</span>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-subtle)' }}>by {activeReplyPost.author}</span>
           </div>
           <button className="close-btn" onClick={() => setActiveReplyPost(null)}>
-            <X size={20} />
+            <IconlyClose size={20} />
           </button>
         </div>
 
@@ -62,7 +62,7 @@ export default function ThreadModal() {
                 className={`support-btn ${activeReplyPost.isSupported ? 'supported' : ''}`}
                 onClick={(e) => handleToggleSupport(activeReplyPost.id, e)}
               >
-                <Heart size={15} fill={activeReplyPost.isSupported ? '#f43f5e' : 'none'} />
+                <IconlyHeart size={15} fill={activeReplyPost.isSupported ? 'var(--restrained-red)' : 'none'} style={{ color: activeReplyPost.isSupported ? 'var(--restrained-red)' : 'currentColor' }} />
                 <span>{activeReplyPost.supportCount} supporting</span>
               </button>
               <span className="replies-count-label">{activeReplyPost.replies ? activeReplyPost.replies.length : 0} responses</span>
@@ -73,7 +73,7 @@ export default function ThreadModal() {
           {role === 'counselor' && (
             <div className="counselor-assistant-box">
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', color: 'var(--primary-teal)', fontWeight: 600, fontSize: '0.85rem' }}>
-                <ShieldCheck size={16} />
+                <IconlyShield size={16} />
                 <span>Verified Counselor Rapid Response Templates</span>
               </div>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -93,7 +93,7 @@ export default function ThreadModal() {
 
           {/* Replies List */}
           <h4 className="replies-section-header">Replies & Support</h4>
-          <div className="thread-replies-list">
+          <div className="thread-replies-list" style={{ maxHeight: '240px', overflowY: 'auto' }}>
             {activeReplyPost.replies && activeReplyPost.replies.length > 0 ? (
               activeReplyPost.replies.map(reply => (
                 <div 
@@ -123,10 +123,11 @@ export default function ThreadModal() {
               placeholder={role === 'counselor' ? "Write verified counselor response..." : "Offer support anonymously..."}
               value={replyText}
               onChange={e => setReplyText(e.target.value)}
+              style={{ flexGrow: 1 }}
               required
             />
-            <button type="submit" className="btn-primary" style={{ width: 'auto', padding: '0 20px' }}>
-              <Send size={15} />
+            <button type="submit" className="btn-primary" style={{ width: 'auto', padding: '0 20px', height: 'auto' }}>
+              <IconlySend size={15} />
               <span>Reply</span>
             </button>
           </form>

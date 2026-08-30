@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { BookOpen, Search, Bookmark, CheckCircle, Sparkles, ChevronRight } from 'lucide-react';
+import { 
+  IconlyDocument, 
+  IconlySearch, 
+  IconlyBookmark, 
+  IconlyCheckCircle, 
+  IconlyStar, 
+  IconlyChevronRight 
+} from './Iconly';
 import { useApp } from '../context/AppContext';
 
 const GUIDES_DATA = [
@@ -59,6 +66,7 @@ export default function ResourcesTab() {
   const [searchQuery, setSearchQuery] = useState('');
   const [bookmarked, setBookmarked] = useState(['g-1']);
   const [completedSteps, setCompletedSteps] = useState({});
+  const [viewDetailOnMobile, setViewDetailOnMobile] = useState(false);
 
   const toggleBookmark = (id, e) => {
     e.stopPropagation();
@@ -96,19 +104,19 @@ export default function ResourcesTab() {
   );
 
   return (
-    <div className="resources-tab-view animate-fade-in">
+    <div className="resources-tab-view animate-fade-in" data-mobile-detail={viewDetailOnMobile.toString()} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
       {/* Left Column: List of Guides & Search */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div className="resources-list-col" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         <div className="form-group" style={{ margin: 0 }}>
           <div style={{ position: 'relative' }}>
-            <span className="animate-icon-search" style={{ position: 'absolute', left: '12px', top: '12.5px', display: 'flex', alignItems: 'center' }}>
-              <Search size={16} color="var(--text-subtle)" />
+            <span className="animate-icon-search" style={{ position: 'absolute', left: '12px', top: '12px', display: 'flex', alignItems: 'center' }}>
+              <IconlySearch size={16} color="var(--text-subtle)" />
             </span>
             <input 
               type="text" 
               className="form-input" 
-              style={{ paddingLeft: '36px', fontSize: '0.875rem' }} 
-              placeholder="Search guides (e.g. anxiety, sleep)..."
+              style={{ paddingLeft: '36px', fontSize: '0.875rem', width: '100%' }} 
+              placeholder="Search resources (e.g. anxiety, sleep)..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
             />
@@ -123,22 +131,24 @@ export default function ResourcesTab() {
               <div 
                 key={guide.id} 
                 className={`resource-guide-card ${isSelected ? 'selected' : ''}`}
-                onClick={() => setSelectedGuide(guide)}
+                onClick={() => {
+                  setSelectedGuide(guide);
+                  setViewDetailOnMobile(true);
+                }}
                 style={{
-                  background: isSelected ? 'rgba(2, 132, 199, 0.06)' : 'var(--card-bg)',
-                  border: isSelected ? '1px solid #0284c7' : '1px solid var(--border)',
+                  background: isSelected ? 'rgba(44, 82, 130, 0.05)' : 'var(--card-bg)',
+                  border: isSelected ? '1px solid var(--primary-blue)' : '1px solid var(--border-color)',
                   borderRadius: '12px',
                   padding: '16px',
                   cursor: 'pointer',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '8px',
-                  transition: 'all 0.2s ease',
-                  boxShadow: isSelected ? '0 4px 12px rgba(2, 132, 199, 0.05)' : 'none'
+                  transition: 'all 0.2s ease'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span className="category-badge" style={{ fontSize: '0.7rem', padding: '2px 8px', background: 'rgba(2, 132, 199, 0.1)', color: '#0284c7' }}>
+                  <span className="category-badge" style={{ fontSize: '0.7rem', padding: '2px 8px', background: 'var(--pill-bg)', color: 'var(--primary-blue)', fontWeight: 'bold' }}>
                     {guide.category}
                   </span>
                   <button 
@@ -146,9 +156,7 @@ export default function ResourcesTab() {
                     style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                     title="Save guide"
                   >
-                    <span className="animate-icon-star">
-                      <Bookmark size={15} fill={isSaved ? '#0284c7' : 'none'} color={isSaved ? '#0284c7' : 'var(--text-subtle)'} />
-                    </span>
+                    <IconlyBookmark size={15} fill={isSaved ? 'var(--primary-blue)' : 'none'} color={isSaved ? 'var(--primary-blue)' : 'var(--text-subtle)'} />
                   </button>
                 </div>
                 <div>
@@ -172,14 +180,22 @@ export default function ResourcesTab() {
           className="guide-detail-view"
           style={{
             background: 'var(--card-bg)',
-            border: '1px solid var(--border)',
+            border: '1px solid var(--border-color)',
             borderRadius: '12px',
-            padding: '24px',
-            boxShadow: 'var(--shadow-sm)'
+            padding: '24px'
           }}
         >
+          <button 
+            onClick={() => setViewDetailOnMobile(false)}
+            className="btn-secondary"
+            style={{ display: 'none', marginBottom: '16px', alignItems: 'center', gap: '6px', height: '36px', padding: '0 16px', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-pill)', cursor: 'pointer' }}
+            id="back-to-resources-btn"
+          >
+            ← Back to Resources
+          </button>
+
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-            <span className="category-badge" style={{ background: 'rgba(2, 132, 199, 0.1)', color: '#0284c7' }}>{selectedGuide.category}</span>
+            <span className="category-badge" style={{ background: 'var(--pill-bg)', color: 'var(--primary-blue)' }}>{selectedGuide.category}</span>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{selectedGuide.readTime}</span>
           </div>
 
@@ -210,7 +226,7 @@ export default function ResourcesTab() {
           })()}
 
           <h4 style={{ fontSize: '0.95rem', fontWeight: 700, marginBottom: '14px', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Sparkles size={16} color="var(--safety-green)" />
+            <IconlyStar size={16} color="var(--safety-green)" />
             <span>Actionable Steps to Apply</span>
           </h4>
 
@@ -223,8 +239,8 @@ export default function ResourcesTab() {
                   className={`guide-step-box ${isCompleted ? 'completed' : ''}`}
                   onClick={() => toggleStepCompleted(selectedGuide.id, idx)}
                   style={{
-                    background: isCompleted ? 'var(--safety-green-light)' : 'var(--input-bg)',
-                    border: isCompleted ? '1px solid var(--safety-green)' : '1px solid var(--border)',
+                    background: isCompleted ? 'var(--safety-green-light)' : 'var(--card-bg)',
+                    border: isCompleted ? '1px solid var(--safety-green)' : '1px solid var(--border-color)',
                     padding: '14px',
                     borderRadius: '10px',
                     display: 'flex',
@@ -234,7 +250,7 @@ export default function ResourcesTab() {
                     transition: 'all 0.2s ease'
                   }}
                 >
-                  <CheckCircle 
+                  <IconlyCheckCircle 
                     size={18} 
                     fill={isCompleted ? 'var(--safety-green)' : 'none'} 
                     color={isCompleted ? '#ffffff' : 'var(--text-subtle)'} 
@@ -254,7 +270,7 @@ export default function ResourcesTab() {
           </div>
         </div>
       ) : (
-        <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border)', borderRadius: '12px', padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
+        <div style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
           Select a guide from the list to view its steps.
         </div>
       )}
