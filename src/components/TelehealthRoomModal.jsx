@@ -20,40 +20,8 @@ export default function TelehealthRoomModal() {
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(false);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
-  const [sessionSeconds, setSessionSeconds] = useState(260); // 4m 20s initial
-  const [chatMessages, setChatMessages] = useState([
-    { sender: 'Dr. Sarah Jenkins', time: '10:02 AM', text: 'Hello Anon#4821! Welcome to your private telehealth session. How are you feeling right now?' }
-  ]);
-  const [newChatText, setNewChatText] = useState('');
-
-  useEffect(() => {
-    if (!activeTelehealthRoom) return;
-
-    const timer = setInterval(() => {
-      setSessionSeconds(prev => prev + 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [activeTelehealthRoom]);
 
   if (!activeTelehealthRoom) return null;
-
-  const formatTimer = (sec) => {
-    const m = Math.floor(sec / 60);
-    const s = sec % 60;
-    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-  };
-
-  const handleSendChat = (e) => {
-    e.preventDefault();
-    if (!newChatText.trim()) return;
-
-    setChatMessages([
-      ...chatMessages,
-      { sender: activeTelehealthRoom.studentAlias || 'Anon#4821', time: 'Just now', text: newChatText.trim() }
-    ]);
-    setNewChatText('');
-  };
 
   const handleEndCall = () => {
     setActiveTelehealthRoom(null);
@@ -82,16 +50,12 @@ export default function TelehealthRoomModal() {
                 <span>•</span>
                 <span>Session #{activeTelehealthRoom.id.slice(-6)}</span>
                 <span>•</span>
-                <span>🔒 FERPA Verified</span>
+                <span>🔒 DPA Act 843 Verified</span>
               </div>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
-            <div style={{ background: 'var(--pill-bg)', border: '2px solid var(--primary-blue)', padding: '8px 16px', borderRadius: '12px', fontSize: '1rem', fontWeight: 700, color: 'var(--primary-blue)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span>⏱️</span>
-              {formatTimer(sessionSeconds)}
-            </div>
             <button onClick={handleEndCall} style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--pill-bg)', border: '1px solid var(--border-color)', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s ease', hover: { background: 'var(--restrained-red)', color: '#fff' } }} title="Close session">
               <IconlyClose size={20} />
             </button>
@@ -99,7 +63,7 @@ export default function TelehealthRoomModal() {
         </div>
 
         {/* Main Content Area */}
-        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 360px', gap: '16px', padding: '16px', overflow: 'hidden', minHeight: 0 }}>
+        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr', gap: '16px', padding: '16px', overflow: 'hidden', minHeight: 0 }}>
           
           {/* Video Section */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', minHeight: 0 }}>
@@ -174,43 +138,7 @@ export default function TelehealthRoomModal() {
             </div>
           </div>
 
-          {/* Chat Sidebar */}
-          <div style={{ background: 'var(--pill-bg)', border: '1px solid var(--border-color)', borderRadius: '16px', padding: '14px', display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px solid var(--border-color)' }}>
-              <div style={{ background: 'var(--primary-blue)', color: '#fff', width: '28px', height: '28px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <IconlyChat size={14} />
-              </div>
-              <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>Session Chat</h4>
-              <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginLeft: 'auto', background: 'var(--card-bg)', padding: '2px 6px', borderRadius: '4px' }}>🔒 Encrypted</span>
-            </div>
 
-            {/* Messages */}
-            <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '12px', paddingRight: '6px' }}>
-              {chatMessages.map((msg, idx) => (
-                <div key={idx} style={{ background: 'var(--card-bg)', padding: '10px', borderRadius: '10px', border: '1px solid var(--border-color)', animation: 'slideIn 0.3s ease' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>
-                    <span style={{ color: 'var(--primary-blue)' }}>{msg.sender}</span>
-                    <span>{msg.time}</span>
-                  </div>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-main)', margin: 0, lineHeight: 1.5, wordWrap: 'break-word' }}>{msg.text}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Message Input */}
-            <form onSubmit={handleSendChat} style={{ display: 'flex', gap: '6px', marginTop: 'auto' }}>
-              <input 
-                type="text"
-                placeholder="Type message..."
-                style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', color: 'var(--text-main)', fontSize: '0.8rem', padding: '8px 12px', borderRadius: '8px', flex: 1, outline: 'none' }}
-                value={newChatText}
-                onChange={e => setNewChatText(e.target.value)}
-              />
-              <button type="submit" style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'var(--primary-blue)', border: 'none', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s ease', flexShrink: 0 }}>
-                <IconlySend size={14} />
-              </button>
-            </form>
-          </div>
         </div>
 
         {/* Professional Control Bar */}

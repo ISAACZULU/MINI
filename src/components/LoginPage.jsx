@@ -24,6 +24,7 @@ import {
   IconlyBot,
   IconlyActivity
 } from './Iconly';
+import { supabase } from '../services/supabase';
 
 export default function LoginPage() {
   const { 
@@ -68,6 +69,7 @@ export default function LoginPage() {
   const [counselorKey, setCounselorKey] = useState('');
   const [showStudentPassword, setShowStudentPassword] = useState(false);
   const [showCounselorKey, setShowCounselorKey] = useState(false);
+  const [demoCounselorIndex, setDemoCounselorIndex] = useState(0);
 
   // Feedback states
   const [feedbackRating, setFeedbackRating] = useState(5);
@@ -86,6 +88,27 @@ export default function LoginPage() {
       author: "Grad Student"
     }
   ]);
+
+  useEffect(() => {
+    async function loadFeedbacks() {
+      try {
+        const { data, error } = await supabase
+          .from('feedbacks')
+          .select('*')
+          .order('timestamp', { ascending: false });
+        if (!error && data && data.length > 0) {
+          const formatted = data.map(item => ({
+            text: item.text,
+            author: item.author_name || 'Anonymous Student'
+          }));
+          setTestimonials(formatted);
+        }
+      } catch (err) {
+        console.warn('Failed to load feedbacks from Supabase:', err);
+      }
+    }
+    loadFeedbacks();
+  }, []);
 
   const handleGuestLogin = () => {
     login({
@@ -118,18 +141,33 @@ export default function LoginPage() {
 
   const handleCounselorLogin = (e) => {
     e.preventDefault();
+    const id = (counselorId || '').trim().toLowerCase();
+    let displayName = 'Dr. Sarah Jenkins, LCSW';
+    let email = 's.jenkins@knust.edu.gh';
+    let toastName = 'Dr. Jenkins';
+
+    if (id.includes('peterson') || id.includes('mark') || id.includes('44219')) {
+      displayName = 'Dr. Mark Peterson, PsyD';
+      email = 'm.peterson@knust.edu.gh';
+      toastName = 'Dr. Peterson';
+    } else if (id.includes('rivera') || id.includes('alex') || id.includes('33921')) {
+      displayName = 'Counselor Alex Rivera, MSW';
+      email = 'a.rivera@knust.edu.gh';
+      toastName = 'Counselor Rivera';
+    }
+
     login({
       isGuest: false,
       userType: 'counselor',
-      displayName: 'Dr. Sarah Jenkins, LCSW',
-      email: 's.jenkins@knust.edu.gh',
+      displayName,
+      email,
       licenseId: counselorId || 'LCSW-88492'
     }, 'counselor');
     setActiveForm(null);
-    showToast('Welcome Dr. Jenkins! Signed in to Counselor Center', 'success');
+    showToast(`Welcome ${toastName}! Signed in to Counselor Center`, 'success');
   };
 
-  const handleFeedbackSubmit = (e) => {
+  const handleFeedbackSubmit = async (e) => {
     e.preventDefault();
     if (!feedbackText.trim()) return;
 
@@ -144,6 +182,19 @@ export default function LoginPage() {
     setFeedbackRating(5);
     setIsFeedbackModalOpen(false);
     showToast('Thank you for your feedback! It has been recorded.', 'success');
+
+    try {
+      await supabase.from('feedbacks').insert([
+        {
+          rating: feedbackRating,
+          text: newTestimonial.text,
+          author_name: newTestimonial.author,
+          timestamp: Date.now()
+        }
+      ]);
+    } catch (err) {
+      console.warn('Supabase feedback sync warning:', err);
+    }
   };
 
   const handleQuickEscape = () => {
@@ -156,8 +207,15 @@ export default function LoginPage() {
   };
 
   const fillDemoCounselor = () => {
-    setCounselorId('LCSW-88492');
-    setCounselorKey('counselorpass');
+    const demos = [
+      { id: 'LCSW-88492 (Dr. Jenkins)', pass: 'counselorpass' },
+      { id: 'PsyD-44219 (Dr. Peterson)', pass: 'counselorpass' },
+      { id: 'MSW-33921 (Counselor Rivera)', pass: 'counselorpass' }
+    ];
+    const picked = demos[demoCounselorIndex];
+    setCounselorId(picked.id);
+    setCounselorKey(picked.pass);
+    setDemoCounselorIndex((demoCounselorIndex + 1) % demos.length);
   };
 
   return (
@@ -192,7 +250,7 @@ export default function LoginPage() {
             style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', padding: '8px 14px', height: 'auto', fontSize: '13px' }}
           >
             <IconlyCheckCircle size={14} color="var(--safety-green)" />
-            <span>FERPA Compliant</span>
+            <span>DPA Act 843 Compliant</span>
           </button>
 
           <button 
@@ -218,12 +276,12 @@ export default function LoginPage() {
  
           {/* Dual Entry Cards (Mobile-first Wrap Grid) */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', margin: '0 auto 32px auto', maxWidth: '780px' }}>
-            {/* Card 1: Identified Login */}
+            {/* Card 1: Student SSO */}
             <div className="premium-card card-blue" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', textAlign: 'left' }}>
               <div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 8px 0', color: 'var(--primary-blue)' }}>Get Support Identified</h3>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 8px 0', color: 'var(--primary-blue)' }}>Student Wellness SSO</h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', margin: '0 0 24px 0', lineHeight: 1.55 }}>
-                  For students to submit concerns linked securely to their official student account credentials.
+                  Sign in with your official university credentials. Post threads, chat with practitioners, and choose to consult anonymously with our built-in identity shield.
                 </p>
               </div>
               <button 
@@ -234,53 +292,65 @@ export default function LoginPage() {
                 className="btn-primary" 
                 style={{ width: '100%' }}
               >
-                <span>SSO Login & Proceed</span>
+                <span>SSO Login & Enter</span>
                 <IconlyArrowRight size={16} />
               </button>
             </div>
  
-            {/* Card 2: Anonymous Message */}
+            {/* Card 2: Counselor Portal */}
             <div className="premium-card card-green" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', textAlign: 'left' }}>
               <div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 8px 0', color: 'var(--safety-green)' }}>Send Anonymous Message</h3>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 8px 0', color: 'var(--safety-green)' }}>Verified Counselor Portal</h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', margin: '0 0 24px 0', lineHeight: 1.55 }}>
-                  Full identity protection with zero data logging (no name, email, or IP record) on the server.
+                  Authorized clinical safety teams, university counselors, and wellness administrators sign in here to manage case files and triage alerts.
                 </p>
               </div>
               <button 
                 onClick={() => {
-                  setActiveForm(activeForm === 'guest' ? null : 'guest');
+                  setActiveForm(activeForm === 'counselor' ? null : 'counselor');
                   setTimeout(() => document.getElementById('auth-form-card')?.scrollIntoView({ behavior: 'smooth' }), 60);
                 }}
                 className="btn-anon-guest" 
                 style={{ width: '100%' }}
               >
-                <span>Enter Anonymously</span>
+                <span>Counselor Log In</span>
                 <IconlyArrowRight size={16} />
               </button>
-            </div>
           </div>
+        </div>
 
-          {/* Counselor Access Shortcut */}
-          <div style={{ marginTop: '28px' }}>
-            <button 
-              onClick={() => {
-                setActiveForm(activeForm === 'counselor' ? null : 'counselor');
-                setTimeout(() => document.getElementById('auth-form-card')?.scrollIntoView({ behavior: 'smooth' }), 60);
-              }}
-              style={{ background: 'none', border: 'none', color: 'var(--primary-teal)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.92rem', fontWeight: 700 }}
-            >
-              Licensed counselor? Log in to your portal here
-            </button>
+          {/* Personal Safety Card Prompt */}
+          <div style={{
+            background: 'var(--safety-green-light)',
+            border: '1px solid rgba(16, 185, 129, 0.2)',
+            padding: '16px 20px',
+            borderRadius: '16px',
+            maxWidth: '780px',
+            margin: '24px auto 0 auto',
+            textAlign: 'left',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '14px'
+          }}>
+            <div style={{ background: 'var(--safety-green)', color: '#fff', padding: '10px', borderRadius: '12px', display: 'flex', flexShrink: 0 }}>
+              <IconlyShield size={22} />
+            </div>
+            <div>
+              <h4 style={{ margin: '0 0 4px 0', fontSize: '0.95rem', fontWeight: 800, color: 'var(--safety-green-dark)' }}>
+                Create Your Personal Safety Card
+              </h4>
+              <p style={{ margin: 0, fontSize: '0.825rem', color: 'var(--safety-green-dark)', opacity: 0.9, lineHeight: 1.5 }}>
+                Ensure your campus safety resources are always at hand. Once logged in, students can fill out and print their personalized emergency safety card with trusted contacts and coping strategies.
+              </p>
+            </div>
           </div>
 
           {/* Inline Active Form Card */}
           {activeForm && (
-            <div id="auth-form-card" className={`premium-card ${activeForm === 'guest' ? 'card-green' : activeForm === 'student' ? 'card-blue' : 'card-yellow'}`} style={{ maxWidth: '600px', margin: '32px auto 0 auto', textAlign: 'left', animation: 'fadeInUp 0.3s ease' }}>
+            <div id="auth-form-card" className={`premium-card ${activeForm === 'student' ? 'card-blue' : 'card-yellow'}`} style={{ maxWidth: '600px', margin: '32px auto 0 auto', textAlign: 'left', animation: 'fadeInUp 0.3s ease' }}>
               <div className="modal-header" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '16px' }}>
                 <h3 className="modal-title">
                   {activeForm === 'student' && 'Student SSO Login'}
-                  {activeForm === 'guest' && 'Secure Anonymous Visitor Entry'}
                   {activeForm === 'counselor' && 'Licensed Counselor Portal'}
                 </h3>
                 <button className="close-btn" onClick={() => setActiveForm(null)} type="button">
@@ -337,34 +407,6 @@ export default function LoginPage() {
                     <IconlyArrowRight size={16} />
                   </button>
                 </form>
-              )}
-
-              {activeForm === 'guest' && (
-                <div className="modal-body" style={{ padding: 0 }}>
-                  <div className="privacy-banner" style={{ background: 'var(--safety-green-light)', borderColor: 'rgba(16, 185, 129, 0.2)', color: 'var(--safety-green-dark)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', borderRadius: '8px', border: '1px solid', fontSize: '0.8rem' }}>
-                    <IconlyCheckCircle size={16} style={{ flexShrink: 0 }} />
-                    <span>Zero personal data recorded. Fully anonymous, cryptographically rotating guest token.</span>
-                  </div>
-
-                  <div style={{ background: 'var(--pill-bg)', border: '1px solid var(--border-color)', padding: '12px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                    <div>
-                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>Your Anonymous Session ID:</span>
-                      <code style={{ fontSize: '1.05rem', fontWeight: 'bold', color: 'var(--primary-teal)' }}>{sessionHash}</code>
-                    </div>
-                    <button 
-                      onClick={rotateSessionHash} 
-                      style={{ background: 'none', border: 'none', color: 'var(--text-subtle)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                      title="Rotate token identity"
-                    >
-                      <IconlyRefresh size={15} />
-                    </button>
-                  </div>
-
-                  <button onClick={handleGuestLogin} className="btn-anon-guest" style={{ width: '100%' }}>
-                    <span>Enter Anonymously</span>
-                    <IconlyArrowRight size={16} />
-                  </button>
-                </div>
               )}
 
               {activeForm === 'counselor' && (
@@ -570,7 +612,11 @@ export default function LoginPage() {
               </div>
               <div style={{ padding: '16px 24px', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'flex-end' }}>
                 <button 
-                  onClick={() => showToast('Log in to read full psychoeducational articles', 'info')}
+                  onClick={() => {
+                    setActiveForm('student');
+                    setTimeout(() => document.getElementById('auth-form-card')?.scrollIntoView({ behavior: 'smooth' }), 60);
+                    showToast('Please log in as a student to read the full psychoeducational articles.', 'info');
+                  }}
                   style={{ background: 'none', border: 'none', color: 'var(--primary-teal)', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.85rem' }}
                 >
                   <span>Read More</span>
@@ -590,7 +636,11 @@ export default function LoginPage() {
               </div>
               <div style={{ padding: '16px 24px', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'flex-end' }}>
                 <button 
-                  onClick={() => showToast('Log in to read full psychoeducational articles', 'info')}
+                  onClick={() => {
+                    setActiveForm('student');
+                    setTimeout(() => document.getElementById('auth-form-card')?.scrollIntoView({ behavior: 'smooth' }), 60);
+                    showToast('Please log in as a student to read the full psychoeducational articles.', 'info');
+                  }}
                   style={{ background: 'none', border: 'none', color: 'var(--primary-teal)', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.85rem' }}
                 >
                   <span>Read More</span>
@@ -640,7 +690,7 @@ export default function LoginPage() {
           <div>
             <h4 style={{ margin: '0 0 8px 0', color: '#f1f5f9', fontWeight: 'bold' }}>Platform</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <li><button onClick={() => setIsFerpaModalOpen(true)} style={{ background: 'none', border: 'none', color: '#8e9fae', cursor: 'pointer', padding: 0, fontSize: '0.85rem' }}>FERPA Verified Status</button></li>
+              <li><button onClick={() => setIsFerpaModalOpen(true)} style={{ background: 'none', border: 'none', color: '#8e9fae', cursor: 'pointer', padding: 0, fontSize: '0.85rem' }}>DPA (Act 843) Status</button></li>
               <li><span style={{ color: '#8e9fae' }}>Security & Anonymity Audit</span></li>
             </ul>
           </div>

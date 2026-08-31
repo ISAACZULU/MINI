@@ -2806,14 +2806,7 @@ body:has(dialog[open]) {
   overflow: hidden;
 }
 
-.article-row-card::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 4px;
-  background: linear-gradient(180deg, var(--primary-blue), var(--primary-teal));
-  opacity: 0.85;
-}
+
 
 .article-row-card:hover {
   transform: translateY(-4px);

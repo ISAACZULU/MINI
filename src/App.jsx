@@ -24,6 +24,7 @@ import Toast from './components/Toast';
 // Inline Tab Views
 import ArticlesTab from './components/ArticlesTab';
 import ResourcesTab from './components/ResourcesTab';
+import InboxTab from './components/InboxTab';
 
 import { 
   IconlyCheckCircle,
@@ -35,7 +36,8 @@ import {
   IconlyHelp,
   IconlyClose,
   IconlyActivity,
-  IconlyDocument
+  IconlyDocument,
+  IconlyChat
 } from './components/Iconly';
 import { CATEGORIES } from './types';
 
@@ -153,13 +155,20 @@ function MainAppContent() {
                   >
                     Peer Threads
                   </button>
+
+                  <button 
+                    className={`sub-nav-btn ${activeTab === 'inbox' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('inbox')}
+                  >
+                    Inbox
+                  </button>
                   
                   <button 
                     className="sub-nav-btn"
                     onClick={() => setIsCreateModalOpen(true)}
                     style={{ color: 'var(--primary-teal)', fontWeight: 600 }}
                   >
-                    + Share Anonymously
+                    + Post
                   </button>
 
                   {!userAuth?.isGuest && (
@@ -180,6 +189,9 @@ function MainAppContent() {
 
             {/* Inline Resources Tab */}
             {activeTab === 'resources' && <ResourcesTab />}
+
+            {/* Inline Inbox Tab */}
+            {activeTab === 'inbox' && <InboxTab />}
 
             {/* Peer Threads & My Posts Feed View */}
             {(activeTab === 'peer_threads' || activeTab === 'my_posts') && (
@@ -253,6 +265,14 @@ function MainAppContent() {
                   <IconlyShield size={15} />
                   <span>Safety Shield & Moderation</span>
                 </button>
+                <button 
+                  className={`sub-nav-btn ${activeTab === 'inbox' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('inbox')}
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <IconlyChat size={15} />
+                  <span>Direct Messages (Inbox)</span>
+                </button>
               </div>
             </div>
 
@@ -260,6 +280,8 @@ function MainAppContent() {
               <AnalyticsDashboard />
             ) : activeTab === 'moderation' ? (
               <ModerationHub />
+            ) : activeTab === 'inbox' ? (
+              <InboxTab />
             ) : (
               <CounselorDashboard />
             )}
@@ -276,7 +298,7 @@ function MainAppContent() {
       <ResourceLibraryModal />
       <SafetyPlanModal />
       <TelehealthRoomModal />
-      <FloatingAIAssistant />
+      {/* <FloatingAIAssistant /> */}
 
       {/* Contact Counselor & Emergency Crisis Modal */}
       {isCrisisModalOpen && (
@@ -302,26 +324,36 @@ function MainAppContent() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <div style={{ border: '1px solid var(--border-color)', padding: '14px 16px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
                   <div>
-                    <h4 style={{ fontWeight: 600, fontSize: '0.95rem' }}>Campus 24/7 Emergency Helpline</h4>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>Free confidential hotline for students</p>
+                    <h4 style={{ fontWeight: 600, fontSize: '0.95rem' }}>KNUST Counselling Centre Hotlines</h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>Alternative lines: +233 59 439 9772 / +233 59 351 0668</p>
                   </div>
-                  <a href="tel:18005550199" style={{ background: 'var(--primary-teal)', color: '#fff', padding: '8px 14px', borderRadius: '9999px', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}>
-                    Call 1-800-555-0199
+                  <a href="tel:+233506449747" style={{ background: 'var(--primary-teal)', color: '#fff', padding: '8px 14px', borderRadius: '9999px', textDecoration: 'none', fontSize: '0.85rem', fontWeight: 600 }}>
+                    Call +233 50 644 9747
                   </a>
                 </div>
 
                 <div style={{ border: '1px solid var(--border-color)', padding: '14px 16px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
                   <div>
-                    <h4 style={{ fontWeight: 600, fontSize: '0.95rem' }}>National Crisis Text Line</h4>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>Text HOME to 741741 for 24/7 support</p>
+                    <h4 style={{ fontWeight: 600, fontSize: '0.95rem' }}>General Inquiry & VoIP Extension</h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>General Office Ext: 510303 | Head Ext: 510301</p>
                   </div>
-                  <span style={{ fontWeight: 600, color: 'var(--primary-teal)', fontSize: '0.9rem' }}>Text 741741</span>
+                  <a href="mailto:counsellingcentre@knust.edu.gh" style={{ textDecoration: 'none', color: 'var(--primary-teal)', fontWeight: 600, fontSize: '0.9rem' }}>
+                    Email Centre
+                  </a>
                 </div>
 
                 <div style={{ border: '1px solid var(--border-color)', padding: '14px 16px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
                   <div>
-                    <h4 style={{ fontWeight: 600, fontSize: '0.95rem' }}>Schedule 1-on-1 Counselor Session</h4>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>Telehealth or in-person appointments</p>
+                    <h4 style={{ fontWeight: 600, fontSize: '0.95rem' }}>Physical Office Location</h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>J. Harper Building, Commercial Area, KNUST, Kumasi</p>
+                  </div>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-subtle)' }}>J. Harper Bldg</span>
+                </div>
+
+                <div style={{ border: '1px solid var(--border-color)', padding: '14px 16px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+                  <div>
+                    <h4 style={{ fontWeight: 600, fontSize: '0.95rem' }}>Schedule 1-on-1 Session</h4>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>Book a private, confidential consult</p>
                   </div>
                   <button className="btn-primary" style={{ width: 'auto', padding: '8px 14px', fontSize: '0.85rem' }} onClick={() => { setIsCrisisModalOpen(false); setIsAppointmentModalOpen(true); }}>
                     Book Appointment
@@ -356,13 +388,13 @@ function MainAppContent() {
       <footer className="app-footer">
         <div className="footer-inner" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
           <p className="footer-disclaimer" style={{ margin: 0 }}>
-            All posts are anonymous. SHA-256 protected session tokens. FERPA & HIPAA audited.
+            All posts are anonymous. SHA-256 protected session tokens. Ghana Data Protection Act (Act 843) audited.
           </p>
 
           <div className="footer-links" style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
             <button className="footer-link ferpa-badge" onClick={() => setIsFerpaModalOpen(true)} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
               <IconlyCheckCircle size={14} color="var(--safety-green)" />
-              <span>FERPA Verified</span>
+              <span>DPA Act 843 Verified</span>
             </button>
             <button className="footer-link" onClick={() => setIsCrisisModalOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
               Crisis resources

@@ -20,7 +20,6 @@ import EmpathyBadges from './EmpathyBadges';
 export default function PostCard({ post }) {
   const { handleToggleSupport, setActiveReplyPost, handleEditPost, sessionHash } = useApp();
   const [isEditing, setIsEditing] = React.useState(false);
-  const [draftTitle, setDraftTitle] = React.useState(post.title);
   const [draftContent, setDraftContent] = React.useState(post.content);
 
   const riskMeta = RISK_CONFIG[post.riskAnalysis?.riskLevel] || RISK_CONFIG.LOW;
@@ -42,7 +41,9 @@ export default function PostCard({ post }) {
   };
 
   const handleSaveEdit = () => {
-    handleEditPost(post.id, draftTitle, draftContent);
+    const firstLine = draftContent.trim().split('\n')[0];
+    const generatedTitle = firstLine.substring(0, 50) + (firstLine.length > 50 ? '...' : '');
+    handleEditPost(post.id, generatedTitle, draftContent);
     setIsEditing(false);
   };
 
@@ -71,11 +72,6 @@ export default function PostCard({ post }) {
 
       {isEditing ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <input
-            value={draftTitle}
-            onChange={(e) => setDraftTitle(e.target.value)}
-            style={{ width: '100%', borderRadius: '10px', border: '1px solid var(--border-color)', padding: '10px 12px', background: 'var(--card-bg)', color: 'var(--text-main)' }}
-          />
           <textarea
             value={draftContent}
             onChange={(e) => setDraftContent(e.target.value)}
@@ -94,7 +90,6 @@ export default function PostCard({ post }) {
         </div>
       ) : (
         <>
-          <h2 className="post-card-title">{post.title}</h2>
           <p className="post-card-body">{post.content}</p>
         </>
       )}

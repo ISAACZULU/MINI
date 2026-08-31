@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useApp } from '../context/AppContext';
 import { 
   IconlyDocument, 
   IconlyHeart, 
@@ -94,7 +95,33 @@ const ARTICLES_DATA = [
 ];
 
 export default function ArticlesTab() {
+  const { articles, goodwillMessages } = useApp();
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [activeCarouselIndex, setActiveCarouselIndex] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const cardsToShow = windowWidth >= 900 ? 3 : (windowWidth >= 600 ? 2 : 1);
+  const shouldSlide = goodwillMessages.length > cardsToShow;
+
+  useEffect(() => {
+    if (!shouldSlide) {
+      setActiveCarouselIndex(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setActiveCarouselIndex(prev => {
+        const maxIdx = goodwillMessages.length - cardsToShow;
+        return prev >= maxIdx ? 0 : prev + 1;
+      });
+    }, 9000); // 9 seconds (5 + 4 seconds)
+    return () => clearInterval(interval);
+  }, [goodwillMessages.length, cardsToShow, shouldSlide]);
 
   return (
     <div className="articles-tab-view animate-fade-in">
@@ -105,53 +132,80 @@ export default function ArticlesTab() {
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-main)' }}>Daily Encouragements & Goodwill</h2>
         </div>
 
-        <div className="goodwill-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
-          {GOODWILL_MESSAGES.map((msg) => (
-            <div
-              key={msg.id}
-              className="goodwill-card"
-              style={{
-                background: msg.color,
-                border: '1px solid rgba(148, 163, 184, 0.14)',
-                padding: '20px',
-                borderRadius: '20px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                minHeight: '180px'
-              }}
-            >
-              <p style={{
-                fontSize: '0.925rem',
-                color: 'var(--text-main)',
-                lineHeight: 1.6,
-                fontStyle: 'italic',
-                marginBottom: '16px',
-                marginTop: 0
-              }}>
-                "{msg.text}"
-              </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{
-                  background: msg.textColor,
-                  color: '#fff',
-                  width: '30px',
-                  height: '30px',
-                  borderRadius: '50%',
+        <div style={{ position: 'relative', overflow: 'hidden', width: '100%', padding: '4px 0' }}>
+          <div style={{ display: 'flex', gap: '16px', transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)', transform: `translateX(calc(-${activeCarouselIndex} * (100% / ${cardsToShow} + ${16 / cardsToShow}px)))` }}>
+            {goodwillMessages.map((msg) => (
+              <div
+                key={msg.id}
+                className="goodwill-card"
+                style={{
+                  flex: `0 0 calc(100% / ${cardsToShow} - ${(cardsToShow - 1) * 16 / cardsToShow}px)`,
+                  boxSizing: 'border-box',
+                  background: msg.color || 'rgba(20, 184, 166, 0.08)',
+                  padding: '24px',
+                  borderRadius: '20px',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 8px 20px rgba(15, 23, 42, 0.12)'
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  minHeight: '180px',
+                  border: '1px solid rgba(148, 163, 184, 0.14)'
+                }}
+              >
+                <p style={{
+                  fontSize: '0.925rem',
+                  color: 'var(--text-main)',
+                  lineHeight: 1.6,
+                  fontStyle: 'italic',
+                  marginBottom: '16px',
+                  marginTop: 0
                 }}>
-                  <IconlyUser size={14} />
-                </div>
-                <div>
-                  <h4 style={{ margin: 0, fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-main)' }}>{msg.author}</h4>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{msg.role}</span>
+                  "{msg.text}"
+                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{
+                    background: msg.textColor || '#0d9488',
+                    color: '#fff',
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 8px 20px rgba(15, 23, 42, 0.12)'
+                  }}>
+                    <IconlyUser size={14} />
+                  </div>
+                  <div>
+                    <h4 style={{ margin: 0, fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-main)' }}>{msg.author}</h4>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{msg.role}</span>
+                  </div>
                 </div>
               </div>
+            ))}
+          </div>
+
+          {/* Dots Indicator */}
+          {shouldSlide && (
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '24px' }}>
+              {Array.from({ length: goodwillMessages.length - cardsToShow + 1 }).map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveCarouselIndex(idx)}
+                  style={{
+                    width: '10px',
+                    height: '10px',
+                    borderRadius: '50%',
+                    background: idx === activeCarouselIndex ? 'var(--primary-teal)' : 'var(--border-color)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: 0,
+                    transition: 'background 0.2s ease'
+                  }}
+                  title={`View slide ${idx + 1}`}
+                />
+              ))}
             </div>
-          ))}
+          )}
         </div>
       </section>
 
@@ -163,7 +217,7 @@ export default function ArticlesTab() {
         </div>
 
         <div className="articles-grid">
-          {ARTICLES_DATA.map((art) => (
+          {articles.map((art) => (
             <div
               key={art.id}
               className="article-row-card"

@@ -155,7 +155,7 @@ export default function LandingGatewayPage() {
             <div>
               <div className="privacy-banner" style={{ background: '#ecfdf5', borderColor: '#a7f3d0', color: '#065f46', marginBottom: '18px' }}>
                 <CheckCircle size={18} style={{ flexShrink: 0 }} />
-                <span>Your identity is cryptographically protected under FERPA & HIPAA safeguards.</span>
+                <span>Your identity is cryptographically protected under Ghana Data Protection Act (Act 843) & DPC safeguards.</span>
               </div>
 
               <div style={{ background: 'var(--pill-bg)', border: '1px solid var(--border-color)', padding: '14px 18px', borderRadius: '12px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

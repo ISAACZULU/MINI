@@ -45,7 +45,7 @@ export default function Header() {
       <div className="header-inner">
         <div 
           className="brand-group" 
-          onClick={() => { setActiveTab('articles'); setSelectedCategory('All'); }}
+          onClick={() => { setActiveTab(role === 'counselor' ? 'counselor_triage' : 'articles'); setSelectedCategory('All'); }}
           style={{ cursor: 'pointer' }}
         >
           <div className="brand-text-container">
@@ -101,10 +101,16 @@ export default function Header() {
             </button>
 
             <div className="dropdown-menu">
+              <button className="dropdown-item" onClick={() => { setIsDropdownOpen(false); setActiveTab('inbox'); }}>
+                <span>Inbox</span>
+              </button>
+
+              <div className="dropdown-divider" />
+
               {role === 'student' && (
                 <>
                   <button className="dropdown-item" onClick={() => { setIsDropdownOpen(false); setIsSafetyPlanModalOpen(true); }}>
-                    <span>Safety Plan</span>
+                    <span>Personal safety card</span>
                   </button>
                   <button className="dropdown-item" onClick={() => { setIsDropdownOpen(false); setIsCrisisModalOpen(true); }} style={{ color: 'var(--restrained-red)' }}>
                     <span style={{ fontWeight: 600 }}>Crisis Helplines</span>
@@ -114,11 +120,7 @@ export default function Header() {
               )}
 
               <button className="dropdown-item" onClick={() => { setIsDropdownOpen(false); setIsFerpaModalOpen(true); }}>
-                <span>FERPA Status</span>
-              </button>
-
-              <button className="dropdown-item" onClick={() => resetDemoData()}>
-                <span>Reset Demo Data</span>
+                <span>DPA Act 843 Status</span>
               </button>
 
               <button className="dropdown-item" onClick={() => { rotateSessionHash(); setIsDropdownOpen(false); }} title="Rotate session hash for complete anonymity">

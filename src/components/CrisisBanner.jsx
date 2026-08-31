@@ -19,9 +19,9 @@ export default function CrisisBanner() {
         </div>
 
         <div className="crisis-right">
-          <a href="tel:18005550199" className="crisis-action-btn primary">
+          <a href="tel:+233506449747" className="crisis-action-btn primary">
             <IconlyPhone size={14} />
-            <span>Call 1-800-555-0199</span>
+            <span>Call +233 50 644 9747</span>
           </a>
           <button className="crisis-action-btn secondary" onClick={() => setIsCrisisModalOpen(true)}>
             <IconlyShield size={14} />

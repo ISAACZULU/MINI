@@ -31,10 +31,10 @@ export default function ComplianceModal() {
           <div style={{ background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '16px', borderRadius: '8px', marginBottom: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--safety-green)', fontWeight: 700, marginBottom: '6px' }}>
               <IconlyCheckCircle size={18} />
-              <span>FERPA & HIPAA Technical Safeguards Verified</span>
+              <span>Ghana Data Protection Act (Act 843) & DPC Verified</span>
             </div>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', margin: 0, lineHeight: 1.5 }}>
-              Haven KNUST strictly separates student academic identifiers from wellness data. All communications utilize ephemeral session tokens with zero permanent IP logging.
+              Haven KNUST strictly complies with the Ghana Data Protection Commission (DPC) standards and the Data Protection Act, 2012 (Act 843). Student academic identifiers remain completely separated from wellness records with zero permanent IP logging.
             </p>
           </div>
 

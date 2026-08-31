@@ -137,7 +137,7 @@ export default function AuthModal() {
             <div>
               <div className="privacy-banner" style={{ background: 'var(--safety-green-light)', borderColor: 'rgba(16, 185, 129, 0.2)', color: 'var(--safety-green-dark)', marginBottom: '18px', padding: '12px', border: '1px solid', borderRadius: '8px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <IconlyCheckCircle size={18} style={{ flexShrink: 0 }} />
-                <span>Zero registration required. Your privacy is cryptographically protected under FERPA guidelines.</span>
+                <span>Zero registration required. Your privacy is cryptographically protected under Ghana Data Protection Act (Act 843) guidelines.</span>
               </div>
 
               <div style={{ background: 'var(--pill-bg)', border: '1px solid var(--border-color)', padding: '16px', borderRadius: '12px', marginBottom: '20px', textAlign: 'center' }}>

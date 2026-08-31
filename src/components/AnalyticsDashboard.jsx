@@ -116,7 +116,7 @@ export default function AnalyticsDashboard() {
       totalThreadsAnalyzed: posts.length,
       categoryDistribution: categoryCounts,
       averageResponseTime: '14 mins',
-      ferpaStatus: 'Audited & Compliant'
+      dpaGhanaStatus: 'Data Protection Act, 2012 (Act 843) Audited & Compliant'
     };
 
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reportData, null, 2));

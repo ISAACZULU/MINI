@@ -36,6 +36,9 @@ export default function SafetyPlanModal() {
       safePlace,
       affirmation
     });
+    setTimeout(() => {
+      window.print();
+    }, 150);
   };
 
   const handlePrintPlan = () => {
@@ -49,7 +52,7 @@ export default function SafetyPlanModal() {
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--safety-green)' }}>
             <IconlyShield size={20} />
-            <h3 className="modal-title" style={{ color: 'inherit' }}>Personal Emergency Safety Net Plan</h3>
+            <h3 className="modal-title" style={{ color: 'inherit' }}>Personal Emergency Safety Plan</h3>
           </div>
           <button className="close-btn" onClick={() => setIsSafetyPlanModalOpen(false)}>
             <IconlyClose size={20} />
@@ -57,13 +60,48 @@ export default function SafetyPlanModal() {
         </div>
 
         <form onSubmit={onSubmit} className="modal-body">
-          <div style={{ background: 'var(--safety-green-light)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '12px', borderRadius: '10px', marginBottom: '18px', fontSize: '0.85rem', color: 'var(--safety-green-dark)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span className="animate-icon-lock"><IconlyLock size={13} /></span>
-              <span>Confidential personal safety plan bound to Session Hash: <strong>{sessionHash}</strong></span>
-            </span>
-            <button type="button" onClick={handlePrintPlan} style={{ background: '#ffffff', color: 'var(--safety-green-dark)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '6px 12px', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}>
-              <IconlyPrinter size={13} /> 
+          <div style={{ 
+            background: 'rgba(13, 110, 253, 0.08)', 
+            border: '1px solid rgba(13, 110, 253, 0.16)', 
+            padding: '24px', 
+            borderRadius: '24px', 
+            marginBottom: '20px', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '16px',
+            alignItems: 'flex-start'
+          }}>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+              <IconlyLock size={16} style={{ color: 'var(--primary-blue)', marginTop: '3px', flexShrink: 0 }} />
+              <div>
+                <div style={{ fontSize: '1rem', color: 'var(--primary-blue)', fontWeight: 500 }}>
+                  Confidential personal safety plan bound to Session Hash:
+                </div>
+                <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--primary-blue)', marginTop: '4px' }}>
+                  {sessionHash}
+                </div>
+              </div>
+            </div>
+            
+            <button 
+              type="submit" 
+              style={{ 
+                background: '#ffffff', 
+                color: 'var(--primary-blue)', 
+                border: '1px solid rgba(13, 110, 253, 0.25)', 
+                padding: '10px 20px', 
+                borderRadius: '9999px', 
+                fontSize: '0.9rem', 
+                fontWeight: 700, 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px', 
+                cursor: 'pointer',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                transition: 'all 0.2s'
+              }}
+            >
+              <IconlyPrinter size={15} /> 
               <span>Print Safety Card</span>
             </button>
           </div>
@@ -135,11 +173,6 @@ export default function SafetyPlanModal() {
               />
             </div>
           </div>
-
-          <button type="submit" className="btn-primary" style={{ width: '100%' }}>
-            <IconlySave size={15} /> 
-            <span>Save Personal Safety Net Card</span>
-          </button>
         </form>
       </div>
     </div>
