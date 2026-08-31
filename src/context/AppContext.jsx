@@ -322,11 +322,18 @@ export function AppProvider({ children }) {
   // Load posts and mood logs from Supabase Cloud Database on startup
   useEffect(() => {
     async function loadFromSupabase() {
+      console.log('Supabase URL configured:', import.meta.env.VITE_SUPABASE_URL);
       try {
         const { data: dbPosts, error: postsErr } = await supabase
           .from('posts')
           .select('*')
           .order('created_at', { ascending: false });
+
+        if (postsErr) {
+          console.error('Supabase posts fetch error:', postsErr);
+        } else {
+          console.log('Supabase posts fetch success, count:', dbPosts ? dbPosts.length : 0, dbPosts);
+        }
 
         if (!postsErr && dbPosts && dbPosts.length > 0) {
           const formattedPosts = dbPosts.map(p => enrichPostWithRisk({
