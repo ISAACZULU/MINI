@@ -605,6 +605,7 @@ export function AppProvider({ children }) {
 
     setAppointments(prev => [newAppt, ...prev]);
     setIsAppointmentModalOpen(false);
+    setActiveTelehealthRoom(newAppt);
     showToast('Telehealth counseling session confirmed!', 'success');
 
     // Save to Supabase Cloud Database asynchronously
