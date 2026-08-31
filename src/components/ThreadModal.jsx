@@ -9,7 +9,10 @@ export default function ThreadModal() {
     setActiveReplyPost, 
     role, 
     handleToggleSupport, 
-    handleAddReply 
+    handleAddReply,
+    myPostIds,
+    sessionHash,
+    handleRevealIdentity
   } = useApp();
 
   const [replyText, setReplyText] = useState('');
@@ -52,6 +55,23 @@ export default function ThreadModal() {
         </div>
 
         <div className="modal-body">
+          {/* Reveal Identity Banner (Safe Promotion) */}
+          {myPostIds.includes(activeReplyPost.id) && activeReplyPost.author === sessionHash && (
+            <div className="reveal-identity-banner" style={{ background: 'var(--pill-bg)', border: '1px solid var(--border-color)', padding: '14px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', marginBottom: '20px' }}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-main)', lineHeight: 1.5 }}>
+                <span style={{ fontWeight: 700, display: 'block', marginBottom: '2px', color: 'var(--primary-teal)' }}>Anonymous Thread Active</span>
+                Feel safe enough to reveal your registered account name to counsellors and peers on this thread?
+              </div>
+              <button 
+                onClick={() => handleRevealIdentity(activeReplyPost.id)}
+                className="btn-primary"
+                style={{ width: 'auto', padding: '8px 16px', fontSize: '0.8rem', height: '36px', flexShrink: 0 }}
+              >
+                Reveal Identity
+              </button>
+            </div>
+          )}
+
           {/* Original Post Content */}
           <div className="thread-original-post">
             <h3 className="thread-title">{activeReplyPost.title}</h3>

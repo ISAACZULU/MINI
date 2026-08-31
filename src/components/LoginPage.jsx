@@ -218,12 +218,12 @@ export default function LoginPage() {
  
           {/* Dual Entry Cards (Mobile-first Wrap Grid) */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', margin: '0 auto 32px auto', maxWidth: '780px' }}>
-            {/* Card 1: Identified Login */}
+            {/* Card 1: Student SSO */}
             <div className="premium-card card-blue" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', textAlign: 'left' }}>
               <div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 8px 0', color: 'var(--primary-blue)' }}>Get Support Identified</h3>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 8px 0', color: 'var(--primary-blue)' }}>Student Wellness SSO</h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', margin: '0 0 24px 0', lineHeight: 1.55 }}>
-                  For students to submit concerns linked securely to their official student account credentials.
+                  Sign in with your official university credentials. Post threads, chat with practitioners, and choose to consult anonymously with our built-in identity shield.
                 </p>
               </div>
               <button 
@@ -234,53 +234,39 @@ export default function LoginPage() {
                 className="btn-primary" 
                 style={{ width: '100%' }}
               >
-                <span>SSO Login & Proceed</span>
+                <span>SSO Login & Enter</span>
                 <IconlyArrowRight size={16} />
               </button>
             </div>
  
-            {/* Card 2: Anonymous Message */}
+            {/* Card 2: Counselor Portal */}
             <div className="premium-card card-green" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', textAlign: 'left' }}>
               <div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 8px 0', color: 'var(--safety-green)' }}>Send Anonymous Message</h3>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 8px 0', color: 'var(--safety-green)' }}>Verified Counselor Portal</h3>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', margin: '0 0 24px 0', lineHeight: 1.55 }}>
-                  Full identity protection with zero data logging (no name, email, or IP record) on the server.
+                  Authorized clinical safety teams, university counselors, and wellness administrators sign in here to manage case files and triage alerts.
                 </p>
               </div>
               <button 
                 onClick={() => {
-                  setActiveForm(activeForm === 'guest' ? null : 'guest');
+                  setActiveForm(activeForm === 'counselor' ? null : 'counselor');
                   setTimeout(() => document.getElementById('auth-form-card')?.scrollIntoView({ behavior: 'smooth' }), 60);
                 }}
                 className="btn-anon-guest" 
                 style={{ width: '100%' }}
               >
-                <span>Enter Anonymously</span>
+                <span>Counselor Log In</span>
                 <IconlyArrowRight size={16} />
               </button>
             </div>
           </div>
 
-          {/* Counselor Access Shortcut */}
-          <div style={{ marginTop: '28px' }}>
-            <button 
-              onClick={() => {
-                setActiveForm(activeForm === 'counselor' ? null : 'counselor');
-                setTimeout(() => document.getElementById('auth-form-card')?.scrollIntoView({ behavior: 'smooth' }), 60);
-              }}
-              style={{ background: 'none', border: 'none', color: 'var(--primary-teal)', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.92rem', fontWeight: 700 }}
-            >
-              Licensed counselor? Log in to your portal here
-            </button>
-          </div>
-
           {/* Inline Active Form Card */}
           {activeForm && (
-            <div id="auth-form-card" className={`premium-card ${activeForm === 'guest' ? 'card-green' : activeForm === 'student' ? 'card-blue' : 'card-yellow'}`} style={{ maxWidth: '600px', margin: '32px auto 0 auto', textAlign: 'left', animation: 'fadeInUp 0.3s ease' }}>
+            <div id="auth-form-card" className={`premium-card ${activeForm === 'student' ? 'card-blue' : 'card-yellow'}`} style={{ maxWidth: '600px', margin: '32px auto 0 auto', textAlign: 'left', animation: 'fadeInUp 0.3s ease' }}>
               <div className="modal-header" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '16px' }}>
                 <h3 className="modal-title">
                   {activeForm === 'student' && 'Student SSO Login'}
-                  {activeForm === 'guest' && 'Secure Anonymous Visitor Entry'}
                   {activeForm === 'counselor' && 'Licensed Counselor Portal'}
                 </h3>
                 <button className="close-btn" onClick={() => setActiveForm(null)} type="button">
@@ -337,34 +323,6 @@ export default function LoginPage() {
                     <IconlyArrowRight size={16} />
                   </button>
                 </form>
-              )}
-
-              {activeForm === 'guest' && (
-                <div className="modal-body" style={{ padding: 0 }}>
-                  <div className="privacy-banner" style={{ background: 'var(--safety-green-light)', borderColor: 'rgba(16, 185, 129, 0.2)', color: 'var(--safety-green-dark)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', padding: '12px', borderRadius: '8px', border: '1px solid', fontSize: '0.8rem' }}>
-                    <IconlyCheckCircle size={16} style={{ flexShrink: 0 }} />
-                    <span>Zero personal data recorded. Fully anonymous, cryptographically rotating guest token.</span>
-                  </div>
-
-                  <div style={{ background: 'var(--pill-bg)', border: '1px solid var(--border-color)', padding: '12px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                    <div>
-                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>Your Anonymous Session ID:</span>
-                      <code style={{ fontSize: '1.05rem', fontWeight: 'bold', color: 'var(--primary-teal)' }}>{sessionHash}</code>
-                    </div>
-                    <button 
-                      onClick={rotateSessionHash} 
-                      style={{ background: 'none', border: 'none', color: 'var(--text-subtle)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                      title="Rotate token identity"
-                    >
-                      <IconlyRefresh size={15} />
-                    </button>
-                  </div>
-
-                  <button onClick={handleGuestLogin} className="btn-anon-guest" style={{ width: '100%' }}>
-                    <span>Enter Anonymously</span>
-                    <IconlyArrowRight size={16} />
-                  </button>
-                </div>
               )}
 
               {activeForm === 'counselor' && (
