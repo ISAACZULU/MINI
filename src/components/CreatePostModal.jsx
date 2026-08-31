@@ -5,11 +5,12 @@ import { CATEGORIES, RISK_CONFIG } from '../types';
 import { analyzeTextRisk } from '../utils/riskAnalyzer';
 
 export default function CreatePostModal() {
-  const { isCreateModalOpen, setIsCreateModalOpen, handleCreatePost, sessionHash } = useApp();
+  const { isCreateModalOpen, setIsCreateModalOpen, handleCreatePost, sessionHash, userAuth } = useApp();
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tag, setTag] = useState('Anxiety');
+  const [isAnonymous, setIsAnonymous] = useState(true);
   const [liveRisk, setLiveRisk] = useState(analyzeTextRisk('', ''));
 
   // Live real-time distress safety analysis as student types
@@ -22,7 +23,7 @@ export default function CreatePostModal() {
   const onSubmit = (e) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) return;
-    handleCreatePost(title, content, tag);
+    handleCreatePost(title, content, tag, isAnonymous);
     setTitle('');
     setContent('');
   };
@@ -34,8 +35,7 @@ export default function CreatePostModal() {
       <div className="modal-card" onClick={e => e.stopPropagation()} style={{ width: '90%', maxWidth: '500px' }}>
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h3 className="modal-title">Share Anonymously</h3>
-            <span className="anon-hash-badge">{sessionHash}</span>
+            <h3 className="modal-title">Create a New Thread</h3>
           </div>
           <button className="close-btn" onClick={() => setIsCreateModalOpen(false)}>
             <IconlyClose size={20} />
@@ -43,10 +43,33 @@ export default function CreatePostModal() {
         </div>
 
         <form onSubmit={onSubmit} className="modal-body">
-          <div className="privacy-banner" style={{ background: 'var(--pill-bg)', border: '1px solid var(--border-color)', padding: '12px', borderRadius: '8px', color: 'var(--text-main)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
-            <IconlyLock size={16} style={{ flexShrink: 0 }} />
-            <span>Identity protected via SHA-256 session hash rotation. No student ID or IP is logged.</span>
+          {/* Anonymity Toggle Checkbox */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'var(--pill-bg)', border: '1px solid var(--border-color)', padding: '12px', borderRadius: '12px', marginBottom: '16px' }}>
+            <input 
+              type="checkbox" 
+              id="is-anonymous-checkbox" 
+              checked={isAnonymous}
+              onChange={e => setIsAnonymous(e.target.checked)}
+              style={{ width: '18px', height: '18px', cursor: 'pointer', margin: 0 }}
+            />
+            <label htmlFor="is-anonymous-checkbox" style={{ fontSize: '0.85rem', fontWeight: 550, color: 'var(--text-main)', cursor: 'pointer', userSelect: 'none', flexGrow: 1 }}>
+              Post anonymously as <code style={{ color: 'var(--primary-teal)', fontFamily: 'monospace' }}>{sessionHash}</code>
+            </label>
           </div>
+
+          {isAnonymous && (
+            <div className="privacy-banner" style={{ background: 'rgba(16, 185, 129, 0.05)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '12px', borderRadius: '8px', color: 'var(--safety-green)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+              <IconlyLock size={16} style={{ flexShrink: 0 }} />
+              <span>Identity protected. No student ID or name is logged to this thread.</span>
+            </div>
+          )}
+
+          {!isAnonymous && (
+            <div className="privacy-banner" style={{ background: 'rgba(50, 121, 249, 0.05)', border: '1px solid rgba(50, 121, 249, 0.2)', padding: '12px', borderRadius: '8px', color: 'var(--text-main)', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem' }}>
+              <IconlyLock size={16} style={{ flexShrink: 0 }} />
+              <span>Posting as <strong style={{ color: 'var(--primary-teal)' }}>{userAuth?.displayName || 'Student'}</strong>. Your name will be visible to peers and counsellors.</span>
+            </div>
+          )}
 
           <div className="form-group">
             <label className="form-label">Topic Category</label>
@@ -115,7 +138,7 @@ export default function CreatePostModal() {
 
           <button type="submit" className="btn-primary" style={{ width: '100%' }}>
             <IconlySend size={16} />
-            <span>Post Anonymously</span>
+            <span>{isAnonymous ? 'Post Anonymously' : 'Post Identified'}</span>
           </button>
         </form>
       </div>

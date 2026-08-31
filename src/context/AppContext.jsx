@@ -483,6 +483,43 @@ export function AppProvider({ children }) {
     showToast('Telehealth counseling session confirmed!', 'success');
   };
 
+  const handleRevealIdentity = (postId) => {
+    setPosts(prev => prev.map(p => {
+      if (p.id === postId) {
+        const updatedReplies = p.replies ? p.replies.map(r => {
+          if (r.author === sessionHash) {
+            return { ...r, author: userAuth.displayName };
+          }
+          return r;
+        }) : [];
+        return {
+          ...p,
+          author: userAuth.displayName,
+          replies: updatedReplies
+        };
+      }
+      return p;
+    }));
+
+    if (activeReplyPost && activeReplyPost.id === postId) {
+      setActiveReplyPost(prev => {
+        const updatedReplies = prev.replies ? prev.replies.map(r => {
+          if (r.author === sessionHash) {
+            return { ...r, author: userAuth.displayName };
+          }
+          return r;
+        }) : [];
+        return {
+          ...prev,
+          author: userAuth.displayName,
+          replies: updatedReplies
+        };
+      });
+    }
+
+    showToast('Your identity has been successfully revealed on this thread!', 'success');
+  };
+
   const resetDemoData = () => {
     localStorage.removeItem('ms_posts_v3');
     localStorage.removeItem('ms_my_posts');
@@ -585,7 +622,8 @@ export function AppProvider({ children }) {
     handleCreatePost,
     handleAddReply,
     handleAddMoodLog,
-    handleBookAppointment
+    handleBookAppointment,
+    handleRevealIdentity
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
